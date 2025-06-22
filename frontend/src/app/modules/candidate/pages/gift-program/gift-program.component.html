@@ -1,0 +1,258 @@
+<div nz-row>
+  <div nz-col [nzXs]="{ span: 24 }" [nzLg]="{ span: 24 }" [nzMd]="{ span: 23, offset:1 }"
+    [nzLg]="{ span: 12, offset: 6 }" [nzXl]="{ span: 12, offset: 6 }" [nzXXl]="{ span: 12, offset: 6 }">
+    <nz-card nzTitle="GIFT Applications" class="bg-white rounded-3" [nzExtra]="applyButtonTemplate">
+      <div>
+        <nz-card [nzBordered]="false" class="bg-light">
+          <div style="overflow-y: auto;height: 564px;">
+            <nz-list class="demo-loadmore-list" *ngIf="applicationrequests.length>0; else noContent">
+              @for (request of applicationrequests; track applicationrequests) {
+              <nz-list-item>
+
+                <nz-list-item-meta>
+                  <nz-list-item-meta-title>
+                    @if(request.giftformAdminStatus == 0 && request.giftformManagerStatus==0){
+                    <nz-tag [nzColor]="'gold'" [nzBordered]="false">{{getStatus(0)}}</nz-tag>
+                    }
+                    @if(request.giftformAdminStatus == 0 && request.giftformManagerStatus == 1){
+                    <nz-tag [nzColor]="'gold'" [nzBordered]="false">{{getStatus(0)}}</nz-tag>
+                    }
+                    @if(request.giftformAdminStatus == 0 && request.giftformManagerStatus == 2){
+                    <nz-tag [nzColor]="'magenta'" [nzBordered]="false">{{getStatus(2)}}</nz-tag>
+                    }
+                    @if(request.giftformAdminStatus == 1 && request.giftformManagerStatus == 1){
+                    <nz-tag [nzColor]="'green'" [nzBordered]="false">{{getStatus(1)}}</nz-tag>
+                    }
+                    @if(request.giftformAdminStatus == 2 && request.giftformManagerStatus == 1){
+                    <nz-tag [nzColor]="'magenta'" [nzBordered]="false">{{getStatus(2)}}</nz-tag>
+                    }
+                    @if(request.giftformAdminStatus == 2 && request.giftformManagerStatus == 2){
+                    <nz-tag [nzColor]="'magenta'" [nzBordered]="false">{{getStatus(2)}}</nz-tag>
+                    }
+                    <h4 class="mb-0">
+                      {{ request.currentDesignation }}
+                      &nbsp;
+                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                      &nbsp;
+                      {{ request.desiredDesignation }}
+                    </h4>
+                  </nz-list-item-meta-title>
+                </nz-list-item-meta>
+                <ul nz-list-item-actions>
+                  <nz-list-item-action>
+                    <button nz-button nzType="default" nzShape="circle" (click)="showGiftStatus(request)">
+                      <span nz-icon nzType="eye" nzTheme="outline"></span>
+                    </button>
+                  </nz-list-item-action>
+                </ul>
+
+              </nz-list-item>
+              }
+            </nz-list>
+          </div>
+        </nz-card>
+      </div>
+    </nz-card>
+    <ng-template #applyButtonTemplate>
+      <button nzShape="round" nz-button nzType="primary" (click)="showGiftForm()">Apply</button>
+    </ng-template>
+  </div>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</div>
+
+<nz-modal [(nzVisible)]="isGiftStatusModalVisible" nzCentered nzTitle="GIFT Form" nzClosable="false" [nzFooter]="null"
+  [nzBodyStyle]="{'borderRadius':'20px'}">
+  <ng-container *nzModalContent>
+    <h3 class="mb-1">Name of Employee:</h3>
+    <p>{{ giftApplication.candidateName }}</p>
+
+    <h3 class="mb-1">Current Designation:</h3>
+    <p>{{ giftApplication.currentDesignation }}</p>
+
+    <h3 class="mb-1">Desired Designation:</h3>
+    <p>{{ giftApplication.desiredDesignation }}</p>
+
+    <h3 class="mb-1">Gaps Identified:</h3>
+    <p>{{ giftApplication.gapsIdentified }}</p>
+
+    <h3 class="mb-1">Plan of Action:</h3>
+    <p>{{ giftApplication.planOfAction }}</p>
+
+    <h3 class="mb-1">Target Achievement Date:</h3>
+    <p>{{ giftApplication.targetAchievementDate | date }}</p>
+
+    <h3 class="mb-1">Self Training Support required:</h3>
+    @if(giftApplication.isSupportRequired == true){
+    <p>Yes</p>
+    } @else{
+    <p>No</p>
+    }
+
+    <h3 class="mb-1">End Result:</h3>
+    <p>{{ giftApplication.endResult }}</p>
+
+    <h3 class="mb-1">
+      What makes you a strong contender for the designation change?
+    </h3>
+    <p>{{ giftApplication.majorAchievements }}</p>
+
+    <h3 class="mb-1">
+      Explain how you plan to gradually move to the desired role (your learning
+      and transistion process)?
+    </h3>
+    <p>{{ giftApplication.learningAndTransistionProcess }}</p>
+
+    <h3 class="mb-1">
+      We always believe that "Individual Growth is Directly Related to the
+      Growth of an Organisation". Let us know how your career growth will
+      benefit the organisation?
+    </h3>
+    <p>{{ giftApplication.careerGrowthContribution }}</p>
+
+    <h3 class="mb-1">
+      List work-related training and certifications that you have:
+    </h3>
+    <p>{{ giftApplication.workRelatedTrainingAndCertifications }}</p>
+
+    <span *ngIf='giftApplication.giftformRejectionReason != null && giftApplication.giftformRejectionReason != ""'>
+      <h3>Rejection Reason</h3>
+      <p>{{giftApplication.giftformRejectionReason}}</p>
+    </span>
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control>
+        <div nz-flex nzJustify="flex-end" [nzGap]="8">
+          <button nz-button nzType="default" (click)="handleGiftStatusBack($event)">
+            Back
+          </button>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>
+
+
+
+<nz-modal [(nzVisible)]="isGiftModalVisible" nzCentered nzTitle="GIFT Form" nzClosable="false" [nzFooter]="null"
+  [nzBodyStyle]="{'borderRadius':'20px'}">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="giftForm" nzLayout="vertical">
+
+      <nz-form-item>
+        <nz-form-label nzFor="designation" nzRequired>Current Designation</nz-form-label>
+        <nz-form-control>
+          <input nzShape="round" nz-input formControlName="currentDesignationTitle" [(ngModel)]="currentDesignation" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="desiredDesignation" nzRequired>Desired Designation</nz-form-label>
+        <nz-form-control>
+          <nz-select id="designation" formControlName="desiredDesignationGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select desired designation" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let designation of designations" [nzValue]="designation.designationGuid"
+              [nzLabel]="designation.designation"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="gapsIdentified">Gaps Identified</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="gapsIdentified" id="gapsIdentified"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="planofAction">Plan of Action</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="planofAction" id="planofAction"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="targetAchievementDate">Target Achievement Date</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="targetAchievementDate" class="targetAchievementDate w-100"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+
+        <nz-form-control>
+          <label nz-checkbox formControlName="isSupportRequired">
+            <span>
+              <nz-form-label nzFor="isSupportRequired">Self Training Support required</nz-form-label>
+            </span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="endResult">End Result</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="endResult" id="endResult"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="majorAchievements"> What makes you a strong contender for the designation
+          change?</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="majorAchievements" id="majorAchievements"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="learningAndTransistionProcess">Explain how you plan to gradually move to the
+          desired
+          role
+          (your learning and transistion process)</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="learningAndTransistionProcess"
+            id="learningAndTransistionProcess" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="careerGrowthContribution">We always believe that "Individual Growth is
+          Directly Related
+          to
+          the Growth of an Organisation". Let us know how your career growth will benefit the
+          organisation</nz-form-label>
+        <nz-form-control>
+          <textarea nzShape="round" nz-input formControlName="careerGrowthContribution" id="careerGrowthContribution"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="workRelatedTrainingAndCertifications">List work-related training and
+          certifications that you
+          have</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="workRelatedTrainingAndCertifications"
+            id="workRelatedTrainingAndCertifications" placeholder="Write your certifcates name"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }" nzShape="round"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row class="register-area">
+        <nz-form-control>
+          <div nz-flex nzJustify="flex-end" [nzGap]="8">
+            <button nz-button nzType="default" nzShape="round" (click)="handleGiftModalCancel($event)">
+              Cancel
+            </button>
+            <button nz-button nzType="primary" nzShape="round" (click)="submitForm()">
+              Submit
+            </button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

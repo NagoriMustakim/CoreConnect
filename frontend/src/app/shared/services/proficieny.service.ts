@@ -1,0 +1,14 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProficienyService {
+  private url = "http://localhost:5289/api/proficiency"
+  constructor(private http: HttpClient) { }
+
+  getProficieny() {
+    return this.http.get(this.url)
+  }
+}

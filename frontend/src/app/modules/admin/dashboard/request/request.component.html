@@ -1,0 +1,176 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Reject Request"
+  nzMaskClosable="false"
+  nzClosable="false"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [nzAutoTips]="autoTips"
+      [formGroup]="validateRejectForm"
+      nzLayout="vertical"
+    >
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="rejectionReason"
+          >Rejection Reason</nz-form-label
+        >
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="rejectionReason"
+            placeholder="Write rejection reason"
+            id="rejectionReason"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-flex nzJustify="flex-end">
+        <button
+          nz-button
+          nzType="default"
+          nzShape="round"
+          (click)="handleRejectModalCancel()"
+        >
+          Cancel</button
+        >&nbsp;
+        <button
+          nz-button
+          nzShape="round"
+          nzType="primary"
+          (click)="handleRejectModalReject()"
+        >
+          Reject
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<h1>All Requests</h1>
+<nz-table
+  nzShowPagination
+  nzShowSizeChanger
+  nzFrontPagination="false"
+  [nzData]="requests"
+  [nzPageSize]="pageSize"
+  nzTableLayout="fixed"
+  [nzTotal]="total"
+  [nzShowTotal]="rangeTemplate"
+  [nzScroll]="{ x: '100%', y: '58vh' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzWidth="60px"></th>
+      <th>Requester Name</th>
+      <th>Request Type</th>
+      <th>Description</th>
+      <th>No. of Members</th>
+      <th>Applied Date</th>
+      <th>On Date</th>
+      <th nzColumnKey="status" [nzFilters]="statusList" [nzFilterFn]="true">
+        Status
+      </th>
+      <th>Rejection Reason</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of requests">
+      <tr >
+      <td [nzExpand]="expandSet.has(item.requestGuid)" [nzExpandIcon]="expandIcon"></td>
+      <td>{{ item.userName }}</td>
+      <td>{{ getFoodStatus(item.requestType) }}</td>
+      <td>
+        <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="10">
+          {{ item.requestDescription }}
+        </p>
+      </td>
+      <td>{{ item.noOfMembers }}</td>
+      <td>{{ item.creationDate | date }}</td>
+      <td>{{ item.requestDate | date }}</td>
+      <td>
+        <nz-tag
+          class="mb-2"
+          [nzColor]="
+            item.requestStatus === 0
+              ? 'gold'
+              : item.requestStatus === 1
+              ? 'green'
+              : 'magenta'
+          "
+          [nzBordered]="false"
+          >{{ getStatus(item.requestStatus) }}</nz-tag
+        >
+      </td>
+      <td>{{ item.requestRejectionReason || "-" }}</td>
+      <td>
+        <nz-space>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzShape="circle"
+            nzType="primary"
+            (click)="ApproveRequest(item.requestGuid)"
+            [disabled]="item.requestStatus == 1 || item.requestStatus == 2"
+          >
+            <span nz-icon nzType="check" nzTheme="outline"></span>
+          </button>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzShape="circle"
+            nzType="default"
+            (click)="showModal(item.requestGuid)"
+            [disabled]="item.requestStatus == 1 || item.requestStatus == 2"
+          >
+            <span nz-icon nzType="close" nzTheme="outline"></span>
+          </button>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzShape="circle"
+            nzType="default"
+            nzDanger
+            (click)="DeleteModal(item.requestGuid)"
+          >
+            <span nz-icon nzType="delete"></span>
+          </button>
+        </nz-space>
+      </td>
+    </tr>
+    <tr [nzExpand]="expandSet.has(item.requestGuid)">
+          <div class="user-list" nz-flex nzAlign="center" [nzVertical]="false" nzJustify="start" nzGap="small" nzWrap="wrap">
+            <div *ngFor="let user of item.users">
+              <nz-tag [nzBordered]="true">
+                {{user.firstName}} {{user.lastName}}
+              </nz-tag>
+          </div>
+        </div>
+    </tr>
+    <ng-template #expandIcon>
+      <span
+        nz-icon
+        *ngIf="!expandSet.has(item.requestGuid)"
+        nzType="plus-circle"
+        nzTheme="outline"
+        (click)="onExpandChange(item.requestGuid, true)"
+      ></span>
+      <span
+        nz-icon
+        *ngIf="expandSet.has(item.requestGuid)"
+        nzType="minus-circle"
+        nzTheme="outline"
+        (click)="onExpandChange(item.requestGuid, false)"
+      ></span>
+    </ng-template>
+    </ng-container>
+  </tbody>
+</nz-table>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Showing {{ range[0] }}-{{ range[1] }} of {{ total }} records
+</ng-template>

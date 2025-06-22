@@ -1,0 +1,91 @@
+<div nz-row>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzLg]="{ span: 20, offset: 2 }" [nzMd]="{ span: 12, offset: 6 }"
+    [nzLg]="{ span: 12, offset: 6 }" [nzXl]="{ span: 12, offset: 6 }" [nzXXl]="{ span: 12, offset: 6 }">
+    <button nz-button nzType="primary" nzShape="round" (click)="showFilterModal()">
+      <span nz-icon nzType="filter" nzTheme="outline">Filters&nbsp;</span>
+    </button>
+    <nz-card [nzBordered]="true" class="bg-light">
+      <nz-list class="demo-loadmore-list" [nzLoading]="initLoading">
+        @for (user of users; track user) {
+        <nz-list-item>
+          @if (user.loading) {
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="true" />
+          } @else {
+          <nz-list-item-meta nzAvatar="{{ user.profilePhotoName }}">
+            <nz-list-item-meta-title>
+              <a class="mb-0" href="http://localhost:4200/candidate/profile/{{ user.userId }}">{{
+                user.employeeName }}</a>
+              <p>{{ user.designation }}</p>
+            </nz-list-item-meta-title>
+          </nz-list-item-meta>
+          }
+        </nz-list-item>
+        }
+        <div class="loadmore" nz-list-load-more>
+          @if (!loadingMore) {
+          <button nz-button (click)="onLoadMore()">loading more</button>
+          }
+        </div>
+      </nz-list>
+    </nz-card>
+  </div>
+
+  <nz-modal [(nzVisible)]="isFilterModalVisible" nzCentered nzTitle="Filters" nzClosable="false" [nzFooter]="null"
+    [nzBodyStyle]="{ borderRadius: '20px' }">
+    <ng-container *nzModalContent>
+      <form nz-form [nzAutoTips]="autoTips" [formGroup]="validateForm" nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzFor="designation">Designation</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="designation" id="designation"
+              placeholder="e.g. Associate Software Engineer" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="experience">Experience</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="experience" id="experience" placeholder="e.g. 4years" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="skills">Skills</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="skills" id="skills" placeholder="e.g. C#" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="projects">Projects</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="projects" id="projects" placeholder="e.g. linkway" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="certificates">Certificates</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="certificates" id="certificates" placeholder="e.g. MS azure" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="training">Training</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="training" id="training" placeholder="e.g. Basic of Angular" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <div nz-flex nzJustify="flex-end" [nzGap]="8">
+          <button nz-button nzType="default" nzShape="round" (click)="handleFiltersModalCancel($event)">
+            Cancel
+          </button>
+          <button nz-button nzType="primary" nzShape="round" (click)="submitForm()">
+            Apply filters
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </nz-modal>
+</div>

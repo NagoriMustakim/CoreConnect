@@ -1,0 +1,115 @@
+<nz-layout class="layout">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null" [nzWidth]="250" nzTheme="light">
+    <div nz-flex [nzVertical]="true" [nzJustify]="'space-between'" class="h-100">
+      <div class="logo-box text-center" [routerLink]="['./']">
+        <img [src]="logoUrl" class="logo" />
+      </div>
+
+      <ul nz-menu nzTheme="light" nzMode="inline" class="menu h-100">
+        <div nz-menu class="scrollable-content hide-scrollbar">
+          <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['./']" class="mt-3">
+            <span nz-icon nzType="dashboard"></span>
+            <span>Dashboard</span>
+          </li>
+          <li nz-submenu nzTitle="Manage" nzIcon="setting">
+            <ul>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['business-units']">Business Units</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['certifications']">Certifications</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['companies']">Companies</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['departments']">Departments</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['designations']">Designations</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['skills']">Skills</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['employment-types']">Employment Types
+              </li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['internal-programs']">Internal Programs
+              </li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['internal-program-categories']">Internal
+                Program Categories</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['location-types']">Location Types</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['projects']">Projects</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['pronouns']">Pronouns</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['proficiencies']">Proficiencies</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['training-types']">Training Types</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['trainings']">Trainings</li>
+            </ul>
+          </li>
+          <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['manage-users']">
+            <span nz-icon nzType="team"></span>
+            <span>Users</span>
+          </li>
+          <li nz-submenu nzTitle="Approval Center" nzIcon="check" class="sub-menu">
+            <ul>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['nominations']">
+                Nominations
+              </li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['requests']">Requests</li>
+              <li nz-menu-item nzMatchRouterExact nzMatchRouter [routerLink]="['gift-applications']">
+                Gift Application
+              </li>
+            </ul>
+          </li>
+        </div>
+        <li nz-menu-item (click)="logout()" class="logout-menu-item" [nzDanger]="true">
+          <span nz-icon nzType="logout"></span>
+          <span> Logout</span>
+        </li>
+      </ul>
+    </div>
+
+
+  </nz-sider>
+  <nz-layout class="right-layout">
+    <nz-header>
+      <nz-card class="header-card">
+        <div nz-flex nzJustify="space-between" nzAlign="center">
+          <div class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+            (click)="onCollapsedChange()">
+          </div>
+          <div nz-flex nzJustify="space-between" nzAlign="center" nzGap="large">
+            <button nz-button nzType="default" nzShape="circle" (click)="showNotificationModal()">
+              <span nz-icon nzType="bell" nzTheme="outline"></span>
+            </button>
+            <nz-input-group nzSize="large" [nzPrefix]="prefixIcon">
+              <input placeholder="Search..." nz-input [(ngModel)]="keywords" (keyup)="onSelectionChange($event)" />
+              <nz-autocomplete [nzDataSource]="filteredOptions" nzBackfill #auto></nz-autocomplete>
+            </nz-input-group>
+            <ng-template #prefixIcon>
+              <span nz-icon nzType="search"></span>
+            </ng-template>
+          </div>
+        </div>
+      </nz-card>
+    </nz-header>
+
+    <nz-content>
+      <nz-card class="inner-content-card">
+        <router-outlet></router-outlet>
+      </nz-card>
+    </nz-content>
+    <nz-footer>Linkway © 2024 Gateway Group</nz-footer>
+  </nz-layout>
+</nz-layout>
+
+<nz-modal [(nzVisible)]="isNotificationsModalVisible" nzCentered nzTitle="Notifications" nzClosable="false"
+  [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <nz-list nzItemLayout="horizontal">
+      @for (notification of notifications; track notification) {
+      <nz-list-item>
+        <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            {{notification.notificationTitle}}
+          </nz-list-item-meta-title>
+          <nz-list-item-meta-description>
+            <p>{{notification.notificationDescription}}</p>
+            <button nz-button nzType="text">Mark as Read</button>
+          </nz-list-item-meta-description>
+        </nz-list-item-meta>
+      </nz-list-item>
+      }
+      @if (notifications.length === 0) {
+      <nz-list-empty />
+      }
+    </nz-list>
+  </ng-container>
+</nz-modal>

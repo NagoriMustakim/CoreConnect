@@ -1,0 +1,82 @@
+.layout {
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.right-layout {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.trigger {
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.scrollable-content {
+  background: transparent;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.trigger:hover {
+  color: #fb8500;
+}
+
+.logo-box {
+  margin: 32px 0;
+}
+
+.logo {
+  height: 40px;
+}
+
+.search {
+  max-width: 20rem;
+}
+
+nz-header {
+  padding: 0;
+  border-radius: 1rem;
+  margin: 1rem;
+  background: #fff;
+  height: fit-content;
+}
+
+::ng-deep .header-card>.ant-card-body {
+  padding: 1rem;
+}
+
+nz-content {
+  margin: 0 1rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.inner-content-card {
+  height: 100%;
+  overflow: auto;
+}
+
+nz-sider {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  height: 100vh;
+}
+
+nz-footer {
+  text-align: center;
+  min-height: 60px;
+  background-color: #f4f4f4;
+}
+
+.menu {
+  background: transparent;
+  display: contents;
+}
+
+.logout-menu-item {
+  margin-top: auto;
+}

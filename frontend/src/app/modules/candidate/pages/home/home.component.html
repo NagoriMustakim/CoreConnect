@@ -1,0 +1,90 @@
+<div nz-row [nzGutter]="[18, 18]">
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzLg]="{ span: 20, offset: 2 }">
+    <p class="fs-2vmax text-secondary p-0 mb-0 mt-4">{{greeting}},</p>
+    <p class="fs-3vmax fw-bold">{{basicDetails.firstName}} {{basicDetails.lastName}}</p>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 11, offset: 1 }" [nzLg]="{ span: 10, offset: 2 }"
+    [nzXl]="{ span: 5, offset: 2 }" [nzXXl]="{ span: 5, offset: 2 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/skills.png" alt="skills" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Skills</h2>
+          <p class="fs-2vmax p-0 mb-0 fw-bold">{{profileStrengthCounts.countSkills}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 11, offset: 0 }" [nzLg]="{ span: 10, offset: 0 }"
+    [nzXl]="{ span: 5, offset: 0 }" [nzXXl]="{ span: 5, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/certificate.png" alt="certifications" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Certifications</h2>
+          <p class="fs-2vmax p-0 mb-0 fw-bold">{{profileStrengthCounts.countCertificates}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 11, offset: 1 }" [nzLg]="{ span: 10, offset: 2 }"
+    [nzXl]="{ span: 5, offset: 0 }" [nzXXl]="{ span: 5, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/project.png" alt="projects" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Projects</h2>
+          <p class="fs-2vmax p-0 mb-0 fw-bold">{{profileStrengthCounts.countProjects}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 11, offset: 0 }" [nzLg]="{ span: 10, offset: 0 }"
+    [nzXl]="{ span: 5, offset: 0 }" [nzXXl]="{ span: 5, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/training.png" alt="trainings" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Trainings</h2>
+          <p class="fs-2vmax p-0 mb-0 fw-bold">{{profileStrengthCounts.countProjects}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzLg]="{ span: 20, offset: 2 }" [nzXl]="{ span: 10, offset: 2 }">
+    <nz-card class="h-100">
+      <div nz-flex [nzGap]="40" nzAlign="center">
+        <nz-progress [nzPercent]="profileStrengthCounts?.strengthPercentage" nzType="circle" [nzWidth]="180"
+          [nzStrokeWidth]="12"></nz-progress>
+        <div nz-flex [nzVertical]="true">
+          <h2>Profile Strength</h2>
+          <p class="text-secondary">
+            By adding more details about you in your profile can help you to improve your profile strength.
+          </p>
+          <button nz-button nzType="primary" nzShape="round" class="mt-2"
+            [disabled]="profileStrengthCounts?.strengthPercentage==100" (click)="goToProfile()">
+            Edit your profile
+          </button>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzLg]="{ span: 20, offset: 2 }" [nzXl]="{ span: 10, offset: 0 }">
+    <nz-card class="h-100">
+      <div nz-flex [nzGap]="40" nzAlign="center">
+        <img src="assets/images/gift.png" alt="gift" class="gift">
+        <div nz-flex [nzVertical]="true">
+          <h2>GIFT Countdown</h2>
+          <p class="fs-2vmax text-secondary p-0 mb-0">{{profileStrengthCounts.giftTimeRemaining}} Days</p>
+          <p class="text-secondary">
+            left to apply for GIFT.
+          </p>
+          <button [disabled]="profileStrengthCounts.giftTimeRemaining !== 0" nz-button nzType="primary" nzShape="round"
+            class="mt-2" (click)="goToGift()">
+            Apply now
+          </button>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>

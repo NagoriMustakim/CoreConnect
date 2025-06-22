@@ -1,0 +1,76 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+    <h3 class="m-0">Key Result Areas</h3>
+    <button nz-button nzType="primary" nzShape="round" (click)="showKRAModal()">
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        Add
+    </button>
+</div>
+<nz-card [nzBordered]="false" class="bg-light">
+    <nz-list class="demo-loadmore-list" [nzLoading]="initLoading" *ngIf="kra.length>0; else noContent">
+        @for (item of kra; track kra) {
+        <nz-list-item>
+            @if (loadingMore) {
+            <nz-skeleton [nzActive]="true" [nzTitle]="false" [nzLoading]="true" />
+            } @else {
+            <nz-list-item-meta>
+                <nz-list-item-meta-title>
+                    <h4 class="mb-0">
+                        {{item.kratitle}}
+                    </h4>
+                </nz-list-item-meta-title>
+                <nz-list-item-meta-description>
+                  <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">
+                    {{item.kradescription}}
+                  </p>
+                </nz-list-item-meta-description>
+            </nz-list-item-meta>
+            <ul nz-list-item-actions>
+                <nz-list-item-action>
+                    <button nz-button nzType="default" nzShape="circle" (click)="showKRAModal(item)">
+                        <span nz-icon nzType="edit" nzTheme="outline"></span>
+                    </button>
+                </nz-list-item-action>
+                <nz-list-item-action>
+                    <button nz-button nzType="default" nzShape="circle" nzDanger
+                        (click)="showKRADeleteConfirm(item.kraguid)">
+                        <span nz-icon nzType="delete" nzTheme="outline"></span>
+                    </button>
+                </nz-list-item-action>
+            </ul>
+            }
+        </nz-list-item>
+        }
+    </nz-list>
+    <ng-template #noContent>
+        <nz-empty></nz-empty>
+    </ng-template>
+</nz-card>
+
+<nz-modal [(nzVisible)]="isKRAModalVisible" nzCentered nzTitle="{{saveMsg}} KRA" nzClosable="false" [nzFooter]="null"
+    [nzBodyStyle]="{'borderRadius':'20px'}">
+    <ng-container *nzModalContent>
+        <form nz-form [nzAutoTips]="autoTips" [formGroup]="formKRA" nzLayout="vertical">
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="kratitle">KRA Name</nz-form-label>
+                <nz-form-control>
+                    <input nz-input type="text" formControlName="kratitle" id="kratitle" placeholder="Enter KRA name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="kradescription">KRA Description</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input type="text" formControlName="kradescription" id="kradescription" placeholder="Enter KRA description" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-flex nzJustify="flex-end" [nzGap]="8">
+                <button nz-button nzType="default" nzShape="round" (click)="handleKRAModalCancel($event)">
+                    Cancel
+                </button>
+                <button nz-button nzType="primary" nzShape="round" (click)="handleKRAModalOk()">
+                    Save
+                </button>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>

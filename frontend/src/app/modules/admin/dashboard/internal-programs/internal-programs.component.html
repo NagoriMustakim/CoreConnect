@@ -1,0 +1,177 @@
+<div nz-flex nzAlign="center" nzJustify="space-between">
+  <h2 class="m-0">Internal Programs</h2>
+  <button nz-button nzType="primary" nzShape="round" (click)="showModal()">
+    <span nz-icon nzType="plus"></span>
+    Add
+  </button>
+</div>
+
+<nz-list>
+  <div *ngIf="internalPrograms.length > 0; else noContent">
+    <nz-list-item *ngFor="let item of internalPrograms">
+      <ng-container>
+        <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            <div nz-flex nzAlign="center" nzJustify="space-between">
+              <div nz-flex nzAlign="center" nzJustify="center" nzGap="small">
+                <h3>{{ item.internalProgramName }} </h3>
+                <h3>
+                  <nz-tag *ngIf="item.isActive"   [nzColor]="'green'" [nzBordered]="false">
+                    <div nz-flex nzAlign="center" nzJustify="center" nzGap="small">
+                      <div class="blob"></div>
+                      Active
+                    </div>
+                  </nz-tag>
+                  <nz-tag *ngIf="item.isInternalProgramCategoryExists" [nzColor]="'blue'" [nzBordered]="false">
+                    Categorized
+                  </nz-tag>
+                  <nz-tag *ngIf="!item.isInternalProgramCategoryExists" [nzColor]="'blue'" [nzBordered]="false">
+                    Uncategorized
+                  </nz-tag>
+                </h3>
+              </div>
+            </div>
+            <p class="m-0">Review cycle: <nz-tag [nzColor]="'orange'" [nzBordered]="false">{{ item.internalProgramReviewCycle }}
+                Months</nz-tag>
+              &nbsp;&bull;&nbsp;
+              Active for: <nz-tag [nzColor]="'orange'" [nzBordered]="false">{{item.internalProgramActiveDays}}
+                Days</nz-tag>
+            </p>
+            @if(item.internalProgramReviewCycle != 0){
+              <span class="text-secondary">{{item.internalProgramStartDate | date }}</span>
+              <span class="text-secondary"> &dash; </span>
+              <span class="text-secondary">{{item.internalProgramEndDate | date }}</span>
+              }
+          </nz-list-item-meta-title>
+          <nz-list-item-meta-description>
+            <span *ngIf="item.internalProgramDescription != null && item.internalProgramDescription != ''">
+              <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">
+                {{item.internalProgramDescription}}</p>
+            </span>
+          </nz-list-item-meta-description>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <a (click)="edit(item)"><button nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzType="edit" nzTheme="outline"></span></button></a>
+          </nz-list-item-action>
+          <nz-list-item-action><a (click)="delete(item.internalProgramGuid)">
+              <button nzDanger nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzDanger nzType="delete"></span></button></a>
+          </nz-list-item-action>
+        </ul>
+      </ng-container>
+    </nz-list-item>
+  </div>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-list>
+
+<nz-modal [(nzVisible)]="isModelVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>Add Internal Program</ng-template>
+
+  <ng-template #modalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.createInternalProgramsModel" nzLayout="vertical"
+      (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramName">Program Name</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="internalProgramName" placeholder="e.g, gift, shabash" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramReviewCycle">Review Cycle</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="internalProgramReviewCycle" id="internalProgramReviewCycle" class="w-100"
+            [nzMin]="0" [nzMax]="60" nzPlaceHolder="Enter Month"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramActiveDays">Active Days</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="internalProgramActiveDays" id="internalProgramActiveDays" class="w-100"
+            [nzMin]="0" nzPlaceHolder="Enter days"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="isInternalProgramCategoryExists">
+            <span>This program consists categories</span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="internalProgramDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="internalProgramDescription" placeholder="Description"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" (click)="handleCancel()" nzShape="round" type="button">
+          Cancel
+        </button>
+        <button nz-button [nzType]="'primary'" nzShape="round" [nzLoading]="service.createInternalProgramsModel.pending"
+          type="submit">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isEditModalVisible" [nzTitle]="editModalTitle" [nzContent]="editModalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #editModalTitle>Edit Internal Program</ng-template>
+
+  <ng-template #editModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.editInternalProgramsModel" nzLayout="vertical"
+      (ngSubmit)="updateInternalProgram()">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramName">Program Name</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="internalProgramName" placeholder="e.g, gift, shabash" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramReviewCycle">Review Cycle</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="internalProgramReviewCycle" id="internalProgramReviewCycle" class="w-100"
+            [nzMin]="0" [nzMax]="60" nzPlaceHolder="Enter Month"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="internalProgramActiveDays">Active Days</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="internalProgramActiveDays" id="internalProgramActiveDays" class="w-100"
+            [nzMin]="0" nzPlaceHolder="Enter days"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="isInternalProgramCategoryExists">
+            <span>This program consists categories</span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="internalProgramDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="internalProgramDescription" placeholder="Description"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" (click)="handleCancel()" nzShape="round" type="button">
+          Cancel
+        </button>
+        <button nz-button [nzType]="'primary'" nzShape="round" [nzLoading]="service.editInternalProgramsModel.pending"
+          type="submit">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</nz-modal>

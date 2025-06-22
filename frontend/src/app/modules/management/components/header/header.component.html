@@ -1,0 +1,83 @@
+<nz-header>
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzXs]="{ span: 4, offset: 1 }" [nzSm]="{ span: 7, offset: 1 }" [nzMd]="{ span: 5, offset: 1 }"
+      [nzLg]="{ span: 5, offset: 2 }" [nzXl]="{ span: 4, offset: 2 }" [nzXXl]="{ span: 2, offset: 2 }"
+      [routerLink]="['./']">
+      <img class="logo-text" alt="Linkway logo" height="36px"
+        src="../../../../../assets/images/linkway-logo-text.png" />
+      <img class="logo" alt="Linkway logo" height="36px" src="../../../../../assets/images/linkway-logo.png" />
+    </div>
+    <div nz-col [nzXs]="{ span: 13, offset: 1 }" [nzSm]="{ span: 11, offset: 1 }" [nzMd]="{ span: 11, offset: 1 }"
+      [nzLg]="{ span: 10, offset: 1 }" [nzXl]="{ span: 5, offset: 0 }" [nzXXl]="{ span: 6, offset: 1 }">
+      <nz-input-group nzSize="large" [nzPrefix]="prefixIcon">
+        <input placeholder="Search..." nz-input [(ngModel)]="keywords" (keyup)="onSelectionChange($event)" />
+      </nz-input-group>
+      <ng-template #prefixIcon>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
+    <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 1 }" [nzMd]="{ span:10, offset: 0 }"
+      [nzLg]="{ span: 9, offset: 0 }" [nzXl]="{ span: 9, offset: 0 }" [nzXXl]="{ span: 7, offset: 1 }" class="menu">
+      <ul nz-menu nzTheme="light" nzMode="horizontal">
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="requests">Request</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="gift-program">GIFT</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="nominations">Nominations</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="profile">
+            <nz-avatar nzIcon="user" nzSrc="{{imageUrl}}/{{
+                  basicDetails.profilePhotoName
+                }}"></nz-avatar>
+            {{ basicDetails.firstName }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 3, offset: 0 }"
+      [nzLg]="{ span: 3, offset: 0 }" [nzXl]="{ span: 2, offset: 0 }" [nzXXl]="{ span: 2, offset: 1 }"
+      class="menu text-end">
+      <button nz-button nzType="default" nzDanger (click)="logout()">
+        Logout
+      </button>
+    </div>
+    <div nz-col [nzXs]="{ span: 4, offset: 0 }" [nzSm]="{ span: 3, offset: 0 }" [nzMd]="{ span: 3, offset: 2 }"
+      [nzLg]="{ span: 3, offset: 1 }" class="menu-btn text-end">
+      <button nz-button nzType="default" (click)="showMenu()">
+        <span nz-icon nzType="menu-unfold"></span>
+      </button>
+    </div>
+  </div>
+</nz-header>
+
+<nz-modal [(nzVisible)]="isMenuModalVisible" nzCentered nzClosable="true" [nzFooter]="null" (nzOnCancel)="onCancel()"
+  [nzBodyStyle]="{ borderRadius: '20px' }">
+  <ng-container *nzModalContent>
+    <ul nz-menu nzTheme="light" nzMode="vertical" class="m-3 b-0">
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="requests" (click)="onCancel()">Request</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="gift-program" (click)="onCancel()">GIFT</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="nominations" (click)="onCancel()">Nominations</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="profile" (click)="onCancel()">
+          <nz-avatar nzIcon="user" nzSrc="{{imageUrl}}/{{
+                  basicDetails.profilePhotoName
+                }}"></nz-avatar>
+          {{ basicDetails.firstName }}
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter [nzDanger]="true">
+        <a (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </ng-container>
+</nz-modal>

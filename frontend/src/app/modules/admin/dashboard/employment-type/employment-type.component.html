@@ -1,0 +1,111 @@
+<div nz-flex [nzJustify]="'space-between'" [nzAlign]="'center'">
+  <h3>Employments</h3>
+
+  <button nz-button nzType="primary" nzShape="circle" (click)="showModal()">
+    <span nz-icon nzType="plus"></span>
+  </button>
+</div>
+
+<nz-modal [(nzVisible)]="isModelVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>Create New Employemnt Type</ng-template>
+
+  <ng-template #modalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.createEmploymentTypeModel"  nzLayout="vertical"  (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label nzRequired  nzFor="employmentTypeTitle">Employemnt Type</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="employmentTypeTitle" placeholder="e.g, Part Time, Full Time..." />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label  nzFor="employmentTypeDescription">Description</nz-form-label>
+        <nz-form-control >
+          <textarea nz-input formControlName="employmentTypeDescription" placeholder="Description" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div style="width: 100%; gap: 0.3em" nz-flex [nzJustify]="'flex-end'" [nzAlign]="'center'">
+          <button nz-button  nzType="default" (click)="handleCancel()" nzShape="round" type="button">
+            Cancel
+          </button>
+          <button nz-button [nzType]="'primary'" nzShape="round" [nzLoading]="service.createEmploymentTypeModel.pending"
+            type="submit">
+            Create Employment Type
+          </button>
+        </div>
+      </nz-form-item>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter> </ng-template>
+</nz-modal>
+
+<nz-list>
+  <div *ngIf="employmentTypes.length > 0; else noContent">
+    <nz-list-item *ngFor="let item of employmentTypes">
+      <ng-container>
+        <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            <p>{{ item.employmentTypeTitle }}</p>
+          </nz-list-item-meta-title>
+
+          <nz-list-item-meta-description>
+            <!-- <p>{{ item.employmentTypeDescription }}</p> -->
+            <span *ngIf="item.employmentTypeDescription != null && item.employmentTypeDescription != ''">
+              <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">{{item.employmentTypeDescription}}</p>
+            </span>
+          </nz-list-item-meta-description>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action><a (click)="edit(item)"><button nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzType="edit" nzTheme="outline"></span></button></a></nz-list-item-action>
+          <nz-list-item-action><a (click)="delete(item.employmentTypeGuid)">
+              <button nzDanger nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzDanger nzType="delete"></span></button></a></nz-list-item-action>
+        </ul>
+      </ng-container>
+    </nz-list-item>
+  </div>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-list>
+
+<nz-modal [(nzVisible)]="isEditModalVisible" [nzTitle]="editModalTitle" [nzContent]="editModalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #editModalTitle>Edit Employment Type</ng-template>
+
+  <ng-template #editModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.editEmploymentTypeModel"  nzLayout="vertical"
+      (ngSubmit)="updateEmploymentType()">
+      <nz-form-item>
+        <nz-form-label nzRequired  nzFor="employmentTypeTitle">Employment Type</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="employmentTypeTitle" placeholder="e.g, Part Time, Full Time..." />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label  nzFor="employmentTypeDescription">Description</nz-form-label>
+        <nz-form-control >
+          <textarea nz-input formControlName="employmentTypeDescription" placeholder="Description" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div style="width: 100%; gap: 0.3em" nz-flex [nzJustify]="'flex-end'" [nzAlign]="'center'">
+
+          <button nz-button  nzType="default" (click)="handleCancel()" nzShape="round" type="button">
+            Cancel
+          </button>
+          <button nz-button [nzType]="'primary'" nzShape="round" [nzLoading]="service.editEmploymentTypeModel.pending"
+            type="submit">
+            Save
+          </button>
+        </div>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>

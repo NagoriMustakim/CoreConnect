@@ -1,0 +1,106 @@
+<div nz-flex [nzJustify]="'space-between'" [nzAlign]="'center'">
+  <h3>Training Types</h3>
+
+  <button nz-button nzType="primary" nzShape="circle" (click)="showModal()">
+    <span nz-icon nzType="plus"></span>
+  </button>
+</div>
+
+<nz-modal [(nzVisible)]="isModelVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>Create New Training Type</ng-template>
+
+  <ng-template #modalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.createTrainingTypeModel" nzLayout="vertical" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="trainingType">Title</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="trainingType" placeholder="Title" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="trainingTypeDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="trainingTypeDescription" placeholder="Description" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div style="width: 100%; gap: 0.3em" nz-flex [nzJustify]="'flex-end'" [nzAlign]="'center'">
+          <button nz-button  nzType="default" (click)="handleCancel()" type="button">
+            Cancel
+          </button>
+          <button nz-button [nzType]="'primary'" [nzLoading]="service.createTrainingTypeModel.pending" type="submit">
+            Create Training Type
+          </button>
+        </div>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>
+
+<nz-list>
+  <ng-container *ngIf="trainingTypes.length > 0; else noContent">
+    <nz-list-item *ngFor="let item of trainingTypes">
+      <ng-container>
+        <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            <p>{{ item.trainingType }}</p>
+          </nz-list-item-meta-title>
+
+          <nz-list-item-meta-description>
+            <!-- <p>{{ item.trainingTypeDescription }}</p> -->
+            <span *ngIf="item.trainingTypeDescription != null && item.trainingTypeDescription != ''">
+              <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">{{item.trainingTypeDescription}}</p>
+            </span>
+          </nz-list-item-meta-description>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action><a (click)="edit(item)"><button nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzType="edit" nzTheme="outline"></span></button></a></nz-list-item-action>
+          <nz-list-item-action><a (click)="delete(item.trainingTypeGuid)">
+              <button nzDanger nz-button nzType="default" nzShape="circle">
+                <span nz-icon nzDanger nzType="delete"></span></button></a></nz-list-item-action>
+        </ul>
+      </ng-container>
+    </nz-list-item>
+  </ng-container>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-list>
+
+<nz-modal [(nzVisible)]="isEditModalVisible" [nzTitle]="editModalTitle" [nzContent]="editModalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #editModalTitle>Edit Training Type</ng-template>
+
+  <ng-template #editModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.editTrainingTypeModel" nzLayout="vertical" (ngSubmit)="handleUpdate()">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="trainingType">Title</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="trainingType" placeholder="Title" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="trainingTypeDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="trainingTypeDescription" placeholder="Description" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div style="width: 100%; gap: 0.3em" nz-flex [nzJustify]="'flex-end'" [nzAlign]="'center'">
+          <button nz-button  nzType="default" (click)="handleCancel()" type="button">
+            Cancel
+          </button>
+          <button nz-button [nzType]="'primary'" [nzLoading]="service.editTrainingTypeModel.pending" type="submit">
+            Save
+          </button>
+        </div>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>

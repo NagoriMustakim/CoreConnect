@@ -1,0 +1,45 @@
+.parent {
+    position: relative;
+}
+
+.avatar {
+    margin-top: -92%;
+    margin-bottom: 1em;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    object-fit: cover;
+    width: 25vw;
+    height: 25vw;
+    max-width: 164px;
+    max-height: 164px;
+    min-width: 124px;
+    min-height: 124px;
+    vertical-align: middle;
+}
+
+.banner {
+    border-radius: 1rem 1rem 0 0;
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+    max-height: 22dvh;
+}
+
+.customDate {
+    width: 100%;
+}
+
+span[nz-typography] {
+    display: block;
+}
+
+span[nz-typography]+span[nz-typography] {
+    margin-top: 8px;
+}
+
+#btnAvatarEdit {
+    margin-left: -3rem;
+    margin-top: -2rem;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+}

@@ -1,0 +1,76 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+  <h3 class="m-0">Languages</h3>
+  <button nz-button nzType="primary" nzShape="round" (click)="showLanguageModal()">
+    <span nz-icon nzType="plus"></span>
+    Add
+  </button>
+</div>
+<nz-list nzGrid>
+  <div nz-row [nzGutter]="16" *ngIf="language.length>0; else noContent">
+    @for (item of language; track language) {
+    <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="24" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+      <nz-list-item>
+        <nz-card [nzBordered]="false" class="bg-light">
+          <div class="combination-wrapper" nz-flex nzJustify="space-between" nzAlign="center">
+            <div>
+              <h3 class="mb-0">{{item.languageName}}</h3>
+              <p class="m-0">{{item.proficiencyTitle}}</p>
+            </div>
+            <ul nz-list-item-actions>
+              <nz-list-item-action>
+                <button nz-button nzType="default" nzShape="circle" (click)="showLanguageModal(item)">
+                  <span nz-icon nzType="edit" nzTheme="outline"></span>
+                </button>
+              </nz-list-item-action>
+              <nz-list-item-action>
+                <button nz-button nzType="default" nzShape="circle" nzDanger
+                  (click)="showLanguageDeleteConfirm(item.languageGuid)">
+                  <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </button>
+              </nz-list-item-action>
+            </ul>
+          </div>
+        </nz-card>
+      </nz-list-item>
+    </div>
+    }
+  </div>
+  <ng-template #noContent>
+      <nz-empty></nz-empty>
+  </ng-template>
+</nz-list>
+
+<nz-modal [(nzVisible)]="isLanguageModalVisible" nzCentered nzTitle="{{saveMsg}} Language" nzClosable="false"
+  [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="formLanguage" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="languageName">Language</nz-form-label>
+        <nz-form-control>
+          <nz-select id="languageName" formControlName="languageName" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select language" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let language of languages" [nzValue]="language"
+              [nzLabel]="language"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="proficiencyGuid">Proficiency</nz-form-label>
+        <nz-form-control>
+          <nz-select id="proficiencyGuid" formControlName="proficiencyGuid" nzShowSearch nzAllowClear nzPlaceHolder="Select proficiency">
+            <nz-option *ngFor="let pro of proficieny" [nzValue]="pro.proficiencyGuid" [nzLabel]="pro.proficiencyTitle">
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleLanguageModalCancel($event)">
+          Cancel
+        </button>
+        <button nz-button nzType="primary" nzShape="round" (click)="handleLanguageModalOk()">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

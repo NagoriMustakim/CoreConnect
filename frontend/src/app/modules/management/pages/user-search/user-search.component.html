@@ -1,0 +1,160 @@
+<div nz-row [nzGutter]="[18, 18]">
+  <div class="user-list-container" nz-col [nzXs]="{ span: 22, offset: 1 }" [nzMd]="{ span: 9, offset: 1 }"
+    [nzLg]="{ span: 7, offset: 2 }" [nzXl]="{ span: 6, offset: 2 }" [nzXXl]="{ span: 5, offset: 2 }">
+    <nz-affix [nzOffsetTop]="87">
+      <nz-card>
+        <div class="mb-3" nz-flex nzJustify="flex-end">
+          <button nz-button nzType="primary" nzShape="round" (click)="showFilterModal()">
+            <span nz-icon nzType="filter" nzTheme="outline"></span>
+            Filters
+          </button>
+        </div>
+        <div class="result">
+          <nz-list class="demo-loadmore-list" *ngIf="list!.length > 0 || initLoading; else noContent">
+            @if (initLoading) {
+            <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="true" />
+            } @else {
+            @for (user of list; track user) {
+            <nz-list-item>
+              <nz-list-item-meta>
+                <nz-list-item-meta-avatar *ngIf="user.profilePhotoName==null"
+                  nzSrc="../../../../../assets/images/avatar.jpg"></nz-list-item-meta-avatar>
+                <nz-list-item-meta-avatar *ngIf="user.profilePhotoName!=null"
+                  nzSrc="{{imageUrl}}/{{user.profilePhotoName}}"></nz-list-item-meta-avatar>
+                <nz-list-item-meta-title>
+                  @if(currentLogedUserId === user.userId){
+                  <a class="mb-0 list-lg" href="http://localhost:4200/management/profile">
+                    <h4 class="m-0">{{user.employeeName}}</h4>
+                    <h6 class="m-0 fs-small">{{ user.designation }}</h6>
+                  </a>
+                  <a class="mb-0 list-sm" href="http://localhost:4200/management/profile">
+                    <h4 class="m-0">{{user.employeeName}}</h4>
+                    <h6 class="m-0 fs-small">{{ user.designation }}</h6>
+                  </a>
+                  }
+                  @else{
+                  <a class="mb-0 list-lg" (click)="getProfileById(user.userId)">
+                    <h4 class="m-0">{{user.employeeName}}</h4>
+                    <h6 class="m-0 fs-small">{{ user.designation }}</h6>
+                  </a>
+                  <a class="mb-0 list-sm" routerLink="../result/{{user.userId}}">
+                    <h4 class="m-0">{{user.employeeName}}</h4>
+                    <h6 class="m-0 fs-small">{{ user.designation }}</h6>
+                  </a>
+                  }
+                </nz-list-item-meta-title>
+              </nz-list-item-meta>
+            </nz-list-item>
+            }
+            <div class="loadmore mt-3" nz-list-load-more nz-flex nzJustify="center">
+              @if (loadingMore && !initLoading) {
+              <button nz-button (click)="onLoadMore()">Load more</button>
+              }
+            </div>
+            }
+          </nz-list>
+          <ng-template #noContent>
+            <nz-result nzTitle="No result found!" nzSubTitle="Please try again with another name"></nz-result>
+          </ng-template>
+        </div>
+      </nz-card>
+    </nz-affix>
+  </div>
+
+  @if(userId !== ''){
+  <div class="box-profile hide-scrollbar" nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 22, offset: 1 }"
+    [nzMd]="{ span: 13, offset: 0 }" [nzLg]="{ span: 13, offset: 0 }" [nzXl]="{ span: 14, offset: 0 }"
+    [nzXXl]="{ span: 10, offset: 0 }">
+    <nz-card class="h-100">
+      <app-profile-view [userId]="userId"></app-profile-view>
+    </nz-card>
+  </div>
+
+  <!-- Comment card-->
+  <div nz-col [nzXs]="{ span: 22, offset: 1}" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 24, offset: 0 }"
+    [nzLg]="{ span: 24, offset: 0 }" [nzXl]="{ span: 24, offset: 0 }" [nzXXl]="{ span: 5, offset: 0 }">
+    <nz-affix [nzOffsetTop]="87">
+      <app-comment [userId]="userId"></app-comment>
+    </nz-affix>
+  </div>
+  }@else{
+  <div class="box-profile hide-scrollbar" nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 22, offset: 1 }"
+    [nzMd]="{ span: 13, offset: 0 }" [nzLg]="{ span: 13, offset: 0 }" [nzXl]="{ span: 14, offset: 0 }"
+    [nzXXl]="{ span: 15, offset: 0 }">
+    <nz-card class="h-100">
+      <div nz-flex nzJustify="center" nzAlign="center" class="h-100" [nzVertical]="true">
+        <img src="../../../../../assets/images/search.jpg" alt="search" height="300" class="mt-4">
+        <h1 class="fs-2vmax fw-bold mt-4">Search users</h1>
+        <h3>Type keywords or use filters to find user</h3>
+      </div>
+    </nz-card>
+  </div>
+  }
+</div>
+
+<nz-modal [(nzVisible)]="isFilterModalVisible" nzCentered nzTitle="Filters" [nzFooter]="null"
+  [nzBodyStyle]="{ borderRadius: '20px' }" (nzOnCancel)="handleFilterModalCancel()">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="validateForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzFor="designation">Designation</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="designation" id="designation"
+            placeholder="e.g. Associate Software Engineer" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="experience">Experience</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="experience" id="experience" placeholder="e.g. 10" onlyNumber />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="skills">Skills</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="skills" id="skills" placeholder="e.g. C#" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="projects">Projects</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="projects" id="projects" placeholder="e.g. Linkway" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="certificates">Certificates</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="certificates" id="certificates" placeholder="e.g. MS Azure" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="training">Training</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="training" id="training" placeholder="e.g. Basic of Angular" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleFilterReset()">
+          Reset
+        </button>
+        <button nz-button nzType="primary" nzShape="round" (click)="submitForm()">
+          Apply filters
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<ng-template #noUserFound>
+  <div nz-flex nzJustify="center" nzAlign="center" class="h-100" [nzVertical]="true">
+    <img src="../../../../../assets/images/search.jpg" alt="search" height="300" class="mt-4">
+    <h1 class="fs-2vmax fw-bold mt-4">Search users</h1>
+    <h3>Type keywords or use filters to find user</h3>
+  </div>
+</ng-template>

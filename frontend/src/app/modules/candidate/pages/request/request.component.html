@@ -1,0 +1,80 @@
+<button nz-button nzShape="round" nzType="primary" (click)="showModal()">Add Request</button>
+
+
+<nz-modal [(nzVisible)]="isRequestVisible" nzTitle="Add Request" nzMaskClosable="false" nzClosable="false"
+    [nzFooter]="null">
+    <ng-container *nzModalContent>
+        <form nz-form [nzAutoTips]="autoTips" [formGroup]="formRequest" nzLayout="vertical">
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="RequestDescription">Description</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="RequestDescription" placeholder="Write description"
+                        id="RequestDescription" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="requestType">Request Type</nz-form-label>
+                <nz-form-control>
+                    <nz-select id="type" formControlName="type" nzShowSearch nzAllowClear nzPlaceHolder="Select training type">
+                        <nz-option nzValue="Lunch" nzLabel="Lunch"></nz-option>
+                        <nz-option nzValue="Dinner" nzLabel="Dinner"></nz-option>
+                        <nz-option nzValue="Outing request" nzLabel="Outing request"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control>
+                    <nz-form-label nzRequired>Enter no of people</nz-form-label>
+                    <input nz-input type="number" formControlName="noOfMembers" placeholder="Enter number of people" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <div nz-flex nzJustify="flex-end">
+                <button nz-button nzType="default" nzShape="round" (click)="handleTrainingModalCancel($event)">
+                    Cancel
+                </button>
+                <button nz-button nzType="primary" nzShape="round" (click)="handleTrainingModalOk()">
+                    Save
+                </button>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>
+
+<h1>My Requests</h1>
+<nz-list class="demo-loadmore-list">
+    @for (item of myRequests; track item) {
+    <nz-list-item>
+        <nz-list-item>
+            <p *ngIf="item.requestType == 0">Launch</p>
+            <p *ngIf="item.requestType == 1">Dinner</p>
+            <p *ngIf="item.requestType == 2">Outing request</p>
+        </nz-list-item>
+
+        <nz-list-item>
+            {{item.requestDescription}}
+        </nz-list-item>
+
+        <nz-list-item>
+            {{item.noOfMembers}}
+        </nz-list-item>
+
+        <nz-list-item>
+            <p *ngIf="item.requestStatus == 0">Pending</p>
+            <p *ngIf="item.requestStatus == 1">Approved</p>
+            <p *ngIf="item.requestStatus == 2">Rejected</p>
+        </nz-list-item>
+
+        <nz-list-item>
+            {{item.creationDate | date}}
+        </nz-list-item>
+
+        <nz-list-item>
+            <p *ngIf="item.requestRejectionReason">{{item.requestRejectionReason}}</p>
+            <p *ngIf="item.requestRejectionReason == null">Empty</p>
+        </nz-list-item>
+
+    </nz-list-item>
+    }
+</nz-list>

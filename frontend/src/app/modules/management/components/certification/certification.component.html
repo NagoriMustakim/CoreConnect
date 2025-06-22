@@ -1,0 +1,190 @@
+<nz-card nzTitle="Certifications" [nzExtra]="extraTemplate">
+  <ng-template #extraTemplate>
+    @if(userId===''){
+    <button nz-button nzType="primary" nzShape="round" (click)="showCertificateModal()">
+      <span nz-icon nzType="plus"></span>
+      Add</button>}
+  </ng-template>
+
+  <nz-card [nzBordered]="false" class="bg-light">
+    <nz-list class="demo-loadmore-list" [nzLoading]="initLoading" *ngIf="certifications!.length > 0; else noContent">
+      @for (certification of certifications; track certification) {
+      <nz-list-item>
+        @if (false) {
+        <nz-skeleton [nzActive]="true" [nzTitle]="false" [nzLoading]="true" />
+        } @else {
+        <nz-list-item-meta>
+          <nz-list-item-meta-avatar>
+            <img nz-image id="certificateImg" alt="Certificate" nzSrc="{{imageUrl}}/{{
+              certification.certificationPhotoName
+            }}" [nzFallback]="fallback" />
+          </nz-list-item-meta-avatar>
+          <nz-list-item-meta-title>
+            <h3 class="mb-0 custom-list-title">
+              {{ certification.certificationTitle }}
+            </h3>
+            <p class="mb-0">
+              {{ certification.companyName }}
+            </p>
+          </nz-list-item-meta-title>
+          <nz-list-item-meta-description>
+            <nz-space>
+              <span *nzSpaceItem>
+                <span *ngIf="certification.certificationIssueDate!=null">Issued:
+                  {{certification.certificationIssueDate | date}}</span>
+                <span
+                  *ngIf="certification.certificationIssueDate!=null && certification.certificationExpirationDate!=null">
+                  &bull; </span>
+                <span *ngIf="certification.certificationExpirationDate!=null">Expires:
+                  {{certification.certificationExpirationDate | date}}</span>
+              </span>
+            </nz-space>
+            <span *ngIf="certification.certificationCredentialId">
+              <p class="p-0">Credential ID:
+                {{ certification.certificationCredentialId }}</p>
+            </span>
+
+            <span *ngIf="certification.certificationCredentialUrl">
+              <a class="p-0" nz-button nzType="link" [href]="certification.certificationCredentialUrl">View
+                Credentials</a>
+            </span>
+
+            <h4 *ngIf="certification.skillTitle">
+              Skill:
+              <nz-tag [nzColor]="'blue'" [nzBordered]="false">{{
+                certification.skillTitle
+                }}</nz-tag>
+            </h4>
+            <span
+              *ngIf="certification.certificationDescription != null && certification.certificationDescription != ''">
+              <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">
+                {{certification.certificationDescription}}</p>
+            </span>
+          </nz-list-item-meta-description>
+        </nz-list-item-meta>
+        @if(userId===''){
+
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <button nz-button nzType="default" nzShape="circle" (click)="showCertificateModal(certification)">
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </nz-list-item-action>
+          <nz-list-item-action>
+            <button nz-button nzType="default" nzShape="circle" nzDanger (click)="
+              showCertificationDeleteConfirm(certification.userCertificationGuid)
+            ">
+              <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </button>
+          </nz-list-item-action>
+        </ul>
+        } }
+      </nz-list-item>
+      }
+    </nz-list>
+    <ng-template #noContent>
+      <nz-empty></nz-empty>
+    </ng-template>
+  </nz-card>
+
+  <nz-modal [(nzVisible)]="isCertificationModalVisible" nzCentered nzTitle="{{ saveMsg }} Certification"
+    nzClosable="false" [nzFooter]="null" [nzBodyStyle]="{ borderRadius: '20px' }">
+    <ng-container *nzModalContent>
+      <form nz-form [nzAutoTips]="autoTips" [formGroup]="formCertificate" nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="certificationGuid">Certification</nz-form-label>
+          <nz-form-control>
+            <nz-select id="certificationGuid" formControlName="certificationGuid" nzPlaceHolder="Select Certification"
+              nzShowSearch nzAllowClear [nzDropdownStyle]="{ 'border-radius': '8px' }">
+              <nz-option *ngFor="let certification of certificationsList" [nzValue]="certification.certificationGuid"
+                [nzLabel]="certification.certificationTitle">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="companyGuid">Issuing Organization</nz-form-label>
+          <nz-form-control>
+            <nz-select id="companyGuid" formControlName="companyGuid" nzPlaceHolder="Select organization" nzShowSearch
+              nzAllowClear [nzDropdownStyle]="{ 'border-radius': '8px' }">
+              <nz-option *ngFor="let company of companies" [nzValue]="company.companyGuid"
+                [nzLabel]="company.companyName">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="skillGuid">Associated Skill</nz-form-label>
+          <nz-form-control>
+            <nz-select id="skillGuid" formControlName="skillGuid" nzShowSearch nzAllowClear nzPlaceHolder="Select skill"
+              [nzDropdownStyle]="{ 'border-radius': '8px' }">
+              <nz-option *ngFor="let skill of skills" [nzValue]="skill.skillGuid" [nzLabel]="skill.skillTitle">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-row [nzGutter]="16">
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Issue Date</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker formControlName="certificationIssueDate" class="w-100"
+                  [nzDisabledDate]="disabledStartDate" (nzOnOpenChange)="handleStartOpenChange()"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzXs]="24" [nzSm]="12">
+            <nz-form-item>
+              <nz-form-label>Expiration Date</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker formControlName="certificationExpirationDate" class="w-100"
+                  [nzDisabledDate]="disabledEndDate" (nzOnOpenChange)="handleEndOpenChange()"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <nz-form-item>
+          <nz-form-label nzFor="certificationCredentialId">Credential Id</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="certificationCredentialId" id="certificationCredentialId"
+              placeholder="Enter credential id" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="certificationCredentialUrl">Credential URL</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="text" formControlName="certificationCredentialUrl" id="certificationCredentialUrl"
+              placeholder="Enter credential url" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="certificationDescription">Description</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input formControlName="certificationDescription" placeholder="Enter description"
+              id="certificationDescription" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-flex nzJustify="space-between" nzAlign="center" class="mb-3">
+          <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" nzAccept="image/png, image/jpeg">
+            <button nz-button>
+              <span nz-icon nzType="upload"></span>
+              Select File
+            </button>
+          </nz-upload>
+          <button
+            *ngIf="formCertificate.value.certificationPhotoName != 'undefined' && formCertificate.value.certificationPhotoName"
+            nz-button nzType="default" nzShape="round" nzDanger (click)="showCertificateImageDeleteConfirm()">
+            Delete Image
+          </button>
+        </div>
+        <div nz-flex nzJustify="flex-end" [nzGap]="8">
+          <button nz-button nzType="default" nzShape="round" (click)="handleCertificateModalCancel($event)">
+            Cancel
+          </button>
+          <button nz-button nzType="primary" nzShape="round" (click)="handleCertificateModalOk()">
+            Save
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </nz-modal>

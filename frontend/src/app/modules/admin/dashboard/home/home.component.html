@@ -1,0 +1,125 @@
+<div nz-row [nzGutter]="[18, 18]">
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 24, offset: 0 }">
+    <p class="fs-2vw text-secondary p-0 mb-0">{{greeting}},</p>
+    <p class="fs-3vw b">{{basicDetails.firstName}} {{basicDetails.lastName}}</p>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 6, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/business-units.png" alt="business-units" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Business Units</h2>
+          <p class="fs-2vw p-0 mb-0">{{dashboardDetails?.totalBusinessUnitsCount}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 6, offset: 0 }" (click)="goto()">
+    <nz-card class="">
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/internal-programs.png" alt="internal-programs" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Internal Programs</h2>
+          <div nz-flex nzAlign="start" nzGap="small" nzJustify="space-between" >
+            <p class="fs-2vw p-0 mb-0">{{dashboardDetails?.totalInternalProgramCount}}</p>
+            <div nz-flex [nzVertical]="true">
+              <div nz-flex nzAlign="center" nzJustify="center" nzGap="small">
+                <div class="blob"></div>
+                Active Now
+              </div>
+                <div nz-flex nzAlign="start" nzGap="small"  *ngFor="let item of internalPrograms">
+                  <nz-tag *ngIf="item.isActive"   [nzColor]="getRandomColor()" [nzBordered]="false">
+                    <div nz-flex nzAlign="center" nzJustify="center" nzGap="small">
+                      {{item.internalProgramName}}
+                    </div>
+                  </nz-tag>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 6, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/employees.png" alt="employees" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Employees</h2>
+          <p class="fs-2vw p-0 mb-0">{{dashboardDetails?.totalEmployeesCount}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 6, offset: 0 }">
+    <nz-card>
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/nominee.png" alt="nominations" class="" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-0">Nominations</h2>
+          <p class="fs-2vw p-0 mb-0">{{dashboardDetails?.totalNominationsCount}}</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 14, offset: 0 }">
+    <nz-card class="h-100">
+      <apx-chart #chart id="chart-internal-program" [series]="chartOptions?.series" [chart]="chartOptions?.chart"
+        [xaxis]="chartOptions?.xaxis" [stroke]="chartOptions?.stroke" [title]="chartOptions?.title"
+        [tooltip]="chartOptions?.tooltip" [dataLabels]="chartOptions?.dataLabels"
+        [legend]="chartOptions?.legend"></apx-chart>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 10, offset: 0 }">
+    <nz-card class="h-100">
+      <div nz-flex [nzGap]="20" nzAlign="start">
+        <img src="assets/images/peding_icon.png" alt="pending" class="pending-icon" style="border-radius: 0;">
+        <div nz-flex [nzVertical]="true">
+          <h2 class="mb-2">Pending Approvals</h2>
+          <nz-statistic
+              *ngIf="dashboardDetails?.totalPendingGiftApplicationCount!=null"
+              [nzValue]="dashboardDetails?.totalPendingGiftApplicationCount"
+              [nzTitle]="'Gift Applications'"
+              [nzPrefix]="prefixTplOne"
+              [nzValueStyle]="{ color:'gray'}"
+
+          ></nz-statistic>
+          <ng-template #prefixTplOne><span nz-icon nzType="gift" nzTheme="twotone"></span>&nbsp;</ng-template>
+          <nz-statistic
+              *ngIf="dashboardDetails?.totalPendingRequestCount!=null"
+              [nzValue]="dashboardDetails?.totalPendingRequestCount"
+              [nzTitle]="'Requests'"
+              [nzPrefix]="foodIcon"
+              [nzValueStyle]="{ color:'gray'}"
+          ></nz-statistic>
+          <ng-template #foodIcon><img src="assets/images/food.png" class="icons" />&nbsp;</ng-template>
+          <nz-statistic
+              *ngIf="dashboardDetails?.totalPendingNominationsCount!=null"
+              [nzValue]="dashboardDetails?.totalPendingNominationsCount"
+              [nzTitle]="'Nominations'"
+              [nzPrefix]="nominationIcon"
+              [nzValueStyle]="{ color:'gray'}"
+          ></nz-statistic>
+          <ng-template #nominationIcon><img src="assets/images/nominee.png" class="icons" />&nbsp;</ng-template>
+
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 12, offset: 2 }" [nzXXl]="{ span: 10, offset: 0 }">
+    <nz-card class="h-100">
+      <apx-chart #barChart id="chart-promotion" [series]="barChartOptions?.series" [chart]="barChartOptions?.chart"
+        [xaxis]="barChartOptions?.xaxis" [yaxis]="barChartOptions?.yaxis" [stroke]="barChartOptions?.stroke"
+        [title]="barChartOptions?.title" [tooltip]="barChartOptions?.tooltip" [dataLabels]="barChartOptions?.dataLabels"
+        [plotOptions]="barChartOptions?.plotOptions"></apx-chart>
+    </nz-card>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+nz-content {
+  margin-top: 88px;
+  background-color: #f4f4f4;
+  height: 100%;
+}
+
+nz-layout {
+  background-color: #f4f4f4;
+  min-height: 100%;
+  height: fit-content;
+  overflow-x: hidden;
+}
+
+.footer {
+  margin: 2rem 0 2rem 0;
+}
+
+nz-footer {
+  padding: 0;
+  background-color: #f4f4f4;
+}

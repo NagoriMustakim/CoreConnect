@@ -1,0 +1,223 @@
+<nz-modal
+  [(nzVisible)]="isRequestVisible"
+  nzTitle="Add Request"
+  nzMaskClosable="false"
+  nzClosable="false"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [nzAutoTips]="autoTips"
+      [formGroup]="formRequest"
+      nzLayout="vertical"
+    >
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="requestType"
+          >Request Type</nz-form-label
+        >
+        <nz-form-control>
+          <nz-select
+            id="type"
+            formControlName="type"
+            nzPlaceHolder="Select request type"
+          >
+            <nz-option nzValue="Lunch" nzLabel="Lunch"></nz-option>
+            <nz-option nzValue="Dinner" nzLabel="Dinner"></nz-option>
+            <nz-option nzValue="Outing" nzLabel="Outing"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Enter no of people</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            type="number"
+            formControlName="noOfMembers"
+            placeholder="Enter number of people"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Select users</nz-form-label>
+        <nz-form-control>
+
+          <nz-select
+            nzMode="multiple"
+            nzPlaceHolder="Select users"
+            nzAllowClear
+            nzShowSearch
+            [ngModelOptions]="{standalone: true}"
+            nzServerSearch
+            [(ngModel)]="selectedUser"
+            (nzOnSearch)="onSearch($event)"
+          >
+            <ng-container *ngFor="let o of optionList">
+              <nz-option
+                *ngIf="!isLoading"
+                [nzValue]="o.userId"
+                [nzLabel]="o.employeeName"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Users...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-col [nzXs]="24" [nzSm]="12">
+        <nz-form-item>
+          <nz-form-label>Outing Date</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker
+              formControlName="requestDate"
+              class="w-100"
+              [nzDisabledDate]="disabledStartDate"
+              (nzOnOpenChange)="handleStartOpenChange()"
+            ></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="RequestDescription"
+          >Description</nz-form-label
+        >
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="RequestDescription"
+            placeholder="Write description"
+            id="RequestDescription"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button
+          nz-button
+          nzType="default"
+          nzShape="round"
+          (click)="handleRequestModalCancel($event)"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="round"
+          (click)="handleRequestModalOk()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<div
+  nz-col
+  [nzXs]="{ span: 22, offset: 1 }"
+  [nzSm]="{ span: 22, offset: 1 }"
+  [nzMd]="{ span: 22, offset: 1 }"
+  [nzLg]="{ span: 20, offset: 2 }"
+  [nzXl]="{ span: 20, offset: 2 }"
+  [nzXXl]="{ span: 20, offset: 2 }"
+>
+  <nz-card nzTitle="My Requests" class="h-100" [nzExtra]="addButtonTemplate">
+    <nz-table
+      [nzShowPagination]="true"
+      nzShowSizeChanger
+      nzFrontPagination="false"
+      [nzData]="requests"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      [nzShowTotal]="rangeTemplate"
+      [nzScroll]="{ y: '55vh' }"
+      nzTableLayout="fixed"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzWidth="60px"></th>
+          <th>Request Type</th>
+          <th>Description</th>
+          <th>No. of Members</th>
+          <th>Request Date</th>
+          <th>On Date</th>
+          <th nzColumnKey="status" [nzFilters]="statusList" [nzFilterFn]="true">
+            Status
+          </th>
+          <th>Rejection Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of requests">
+        <tr >
+          <td [nzExpand]="expandSet.has(item.requestGuid)" [nzExpandIcon]="expandIcon"></td>
+          <td>{{ getFoodStatus(item.requestType) }}</td>
+          <td>
+            <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="3">
+              {{ item.requestDescription }}
+            </p>
+          </td>
+          <td>{{ item.noOfMembers }}</td>
+          <td>{{ item.creationDate | date }}</td>
+          <td>{{ item.requestDate | date }}</td>
+          <td>
+            <nz-tag
+              [nzColor]="
+                item.requestStatus === 0
+                  ? 'gold'
+                  : item.requestStatus === 1
+                  ? 'green'
+                  : 'magenta'
+              "
+              [nzBordered]="false"
+              >{{ getStatus(item.requestStatus) }}</nz-tag
+            >
+          </td>
+          <td>{{ item.requestRejectionReason || "-" }}</td>
+        </tr>
+        <tr [nzExpand]="expandSet.has(item.requestGuid)">
+          <div class="user-list" nz-flex nzAlign="center" [nzVertical]="false" nzJustify="start" nzGap="small" nzWrap="wrap">
+            <div *ngFor="let user of item.users">
+              <nz-tag [nzBordered]="true">
+                {{user.firstName}} {{user.lastName}}
+              </nz-tag>
+            </div>
+          </div>
+        </tr>
+        <ng-template #expandIcon>
+          <span
+            nz-icon
+            *ngIf="!expandSet.has(item.requestGuid)"
+            nzType="plus-circle"
+            nzTheme="outline"
+            (click)="onExpandChange(item.requestGuid, true)"
+          ></span>
+          <span
+            nz-icon
+            *ngIf="expandSet.has(item.requestGuid)"
+            nzType="minus-circle"
+            nzTheme="outline"
+            (click)="onExpandChange(item.requestGuid, false)"
+          ></span>
+        </ng-template>
+        </ng-container>
+      </tbody>
+    </nz-table>
+    <ng-template #addButtonTemplate>
+      <button nz-button nzShape="round" nzType="primary" (click)="showModal()">
+        <span nz-icon nzType="plus"></span>
+        New Request
+      </button>
+    </ng-template>
+  </nz-card>
+</div>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Showing {{ range[0] }}-{{ range[1] }} of {{ total }} records
+</ng-template>

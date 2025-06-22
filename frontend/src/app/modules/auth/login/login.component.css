@@ -1,0 +1,164 @@
+.right-container {
+  background-color: #2d2d2d;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  color: #f7f7f7;
+  padding: 1.5em;
+  border-radius: 0.9em;
+  max-width: 400px;
+}
+
+.is-invalid {
+  border-color: red;
+  outline-offset: 0.2em;
+  outline-color: rgb(255, 172, 172);
+  border: 1px solid red;
+}
+
+.text-danger {
+  color: red;
+}
+
+.heading-center {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.heading-center h2 {
+  color: #f7f7f7;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5em;
+  margin-top: 1em;
+}
+
+.main {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #f7f7f7;
+}
+
+.txt-input {
+  background-color: #ffffff;
+  box-shadow: none;
+  border-radius: 0.3em;
+  padding: 0.5em;
+  width: 20em;
+}
+
+.login-btn {
+  padding-block: 0.4em;
+  padding-inline: 1.8em;
+  border-radius: 0.5em;
+  border: none;
+  text-align: center;
+  height: 2.5em;
+  background-color: #fb8500;
+  color: #f7f7f7;
+  font-size: 1.1em;
+}
+
+.field-container-signup {
+  display: flex;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.field-container-signup a {
+  text-decoration: none;
+  color: #fb8500;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
+
+.footer-heading {
+  margin-left: 0.06em;
+  font-size: 2rem;
+  letter-spacing: 0.30em;
+}
+
+.bubble-row {
+  display: flex;
+}
+
+.bubble-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble {
+  height: 5em;
+  width: 5em;
+  background-color: #2D2D2D;
+  border-radius: 50%;
+}
+
+.row-2 .bubble {
+  background-color: #414141;
+}
+
+.row-3 .bubble {
+  background-color: #555555;
+}
+
+.row-3 .start {
+  background-color: #DF5C28;
+}
+
+.row-4 .bubble {
+  background-color: #747474;
+}
+
+.row-4 .start {
+  background-color: #DF5C28;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 5em 5em 0;
+  border-color: transparent #DF5C28 transparent transparent;
+  transform: rotate(0deg);
+}
+
+@media only screen and (max-width: 600px) {
+  .left-container {
+    display: none;
+  }
+
+  .right-container {
+    margin-inline: 3em !important;
+  }
+}
+
+.logo-text {
+  height: 5vmax;
+}
+
+::ng-deep .ant-input-affix-wrapper {
+  padding-block: 0.5rem;
+}
+
+::ng-deep .ant-btn-primary {
+  padding-inline: 2rem;
+}

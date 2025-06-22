@@ -1,0 +1,18 @@
+textarea + textarea {
+  margin-top: 24px;
+}
+
+nz-select {
+  margin: 0 8px 10px 0;
+  width: 120px;
+}
+
+.users-list {
+  max-height: 10rem;
+  overflow: auto;
+}
+
+::ng-deep .ant-tag{
+  font-size: medium;
+  padding-block: 0.3rem;
+}

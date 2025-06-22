@@ -1,0 +1,132 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+  <h3 class="m-0">Projects</h3>
+  @if(userId===''){
+  <button nz-button nzType="primary" nzShape="round" (click)="showProjectModal()">
+    <span nz-icon nzType="plus"></span>
+    Add
+  </button>
+  }
+</div>
+<nz-card [nzBordered]="false" class="bg-light">
+  <nz-list class="demo-loadmore-list" [nzLoading]="initLoading" *ngIf="projects.length>0; else noContent">
+    @for (project of projects; track project) {
+    <nz-list-item>
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          <h4 class="mb-0">{{ project.projectTitle }}</h4>
+        </nz-list-item-meta-title>
+        <nz-list-item-meta-description>
+
+          <nz-space>
+            <span *nzSpaceItem class="text-secondary">{{project.projectStartDate | date}}</span>
+            <span *nzSpaceItem class="text-secondary">&dash;</span>
+            <span *nzSpaceItem class="text-secondary">{{project.isProjectActive?'Present':project.projectEndDate |
+              date}}</span>
+          </nz-space>
+          <span *ngIf="project.projectDescription != null && project.projectDescription != ''">
+            <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary m-0">
+              {{project.projectDescription}}</p>
+          </span>
+          <div *ngIf="project.skills.length > 0">
+            Technologies Used:
+            <nz-tag nzColor="blue" [nzBordered]="false" *ngFor="let skill of project.skills">
+              {{skill.skillTitle}}
+            </nz-tag>
+          </div>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
+      @if(userId===''){
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <button nz-button nzType="default" nzShape="circle" (click)="showProjectModal(project)">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </nz-list-item-action>
+        <nz-list-item-action>
+          <button nz-button nzType="default" nzShape="circle" nzDanger
+            (click)="showProjectDeleteConfirm(project.userProjectGuid)">
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </nz-list-item-action>
+      </ul>
+      }
+    </nz-list-item>
+    }
+  </nz-list>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-card>
+
+<nz-modal [(nzVisible)]="isProjectModalVisible" nzCentered nzTitle="{{saveMsg}} Project" nzClosable="false"
+  (nzAfterClose)="handleAfterProjectModalClose()" [nzFooter]="null" [nzBodyStyle]="{'borderRadius':'20px'}">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="formProject" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="projectGuid">Project</nz-form-label>
+        <nz-form-control>
+          <nz-select id="projectGuid" formControlName="projectGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select project" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let project of projectList" [nzValue]="project.projectGuid"
+              [nzLabel]="project.projectTitle"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="skillsGuids">Technologies Used in Project</nz-form-label>
+        <nz-form-control>
+          <nz-select id="skillsGuids"  [ngModelOptions]="{standalone: true}" nzMode="multiple" nzShowSearch nzAllowClear [(ngModel)]="listOfSelectedSkills"
+            nzPlaceHolder="Select technology" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            @for(skill of skillsList;track skillsList){
+              <nz-option  [nzValue]="skill.skillGuid"
+              [nzLabel]="skill.skillTitle"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="isProjectActive" (ngModelChange)="handleCurrentProjectCheckbox($event)">
+            <span>I am currently working on this project</span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzXs]="24" [nzSm]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Start Date</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="projectStartDate" class="w-100" [nzDisabledDate]="disabledStartDate"
+                (nzOnOpenChange)="handleStartOpenChange()"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="!formProject.controls['isProjectActive'].value">End Date</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="projectEndDate" [nzDisabled]="formProject.controls['isProjectActive'].value"
+                class="w-100" [nzDisabledDate]="disabledEndDate" (nzOnOpenChange)="handleEndOpenChange()">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label nzFor="projectDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="projectDescription" placeholder="Enter description"
+            id="projectDescription" [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleProjectModalCancel($event)">
+          Cancel
+        </button>
+        <button nz-button nzType="primary" nzShape="round" (click)="handleProjectModalOk()">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

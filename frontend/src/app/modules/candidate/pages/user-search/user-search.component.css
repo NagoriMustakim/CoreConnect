@@ -1,0 +1,23 @@
+.result {
+    min-height: 70vh;
+    height: 70vh;
+    overflow: auto;
+}
+
+.list-sm {
+    display: none;
+}
+
+@media only screen and (max-width: 767px) {
+    .box-profile {
+        display: none;
+    }
+
+    .list-sm {
+        display: inline-block;
+    }
+
+    .list-lg {
+        display: none;
+    }
+}

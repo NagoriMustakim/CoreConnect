@@ -1,0 +1,378 @@
+<div nz-row [nzGutter]="[18, 18]">
+  <!-- Profile card -->
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 13, offset: 1 }"
+    [nzLg]="{ span: 14, offset: 2 }" [nzXl]="{ span: 14, offset: 2 }" [nzXXl]="{ span: 14, offset: 2 }">
+    <nz-card [nzCover]="coverTemplate" class="h-100">
+      <div nz-flex nzJustify="space-between" nzWrap="wrap" [nzGap]="'middle'" nzAlign="start">
+        <div>
+          <img nz-image nzSrc='{{imageUrl}}/{{basicDetails.profilePhotoName}}' class="avatar" alt="avatar"
+            [nzFallback]="avtarFallback">
+          <button id="btnAvatarEdit" nz-button nzType="default" nzShape="circle" (click)="showProfileImageModel()">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div nz-flex nzAlign="end" [nzGap]="'small'">
+          <button nz-button nzType="default" nzShape="circle" (click)="showBasicDetailModal(basicDetails)">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <div nz-flex nzJustify="space-between" nzAlign="center" nzWrap="wrap" [nzGap]="'middle'">
+        <div>
+          <div nz-flex nzAlign="center">
+            <h1 class="mb-0">
+              {{ basicDetails.firstName }}
+              {{ basicDetails.lastName }}
+            </h1>
+            &nbsp;
+            <p class="mb-0" *ngIf="basicDetails.pronoun">({{basicDetails.pronoun}})</p>
+          </div>
+          <p class="fs-6 m-0">{{ basicDetails.designation }}</p>
+        </div>
+        <nz-space nzDirection="vertical">
+          <div *nzSpaceItem>
+            <img *ngIf="basicDetails.businessUnitName !== null" nz-image nzSrc="{{imageUrl}}/{{
+                basicDetails.businessUnitLogoName
+              }}" class="rounded-circle" alt="Business Unit" [nzFallback]="businessUnitFallback" width="36px" />
+            <span class="fs-6">
+              {{ basicDetails.businessUnitName }}
+            </span>
+          </div>
+          <div *nzSpaceItem>
+            <button nz-button nzType="primary" (click)="openResetModal()">
+              Change Password
+            </button>
+          </div>
+        </nz-space>
+      </div>
+    </nz-card>
+    <ng-template #coverTemplate>
+      <img src="{{bannerFallback}}" class="banner" alt="" />
+    </ng-template>
+  </div>
+
+  <!-- Intro card -->
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 9, offset: 0 }"
+    [nzLg]="{ span: 6, offset: 0 }" [nzXl]="{ span: 6, offset: 0 }" [nzXXl]="{ span: 6, offset: 0 }">
+    <nz-card nzTitle="Intro" class="h-100">
+      <div nz-flex [nzVertical]="true" class="h-100" nzJustify="space-around">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="#9fa9bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-brand-skype icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M12 3a9 9 0 0 1 8.603 11.65a4.5 4.5 0 0 1 -5.953 5.953a9 9 0 0 1 -11.253 -11.253a4.5 4.5 0 0 1 5.953 -5.954a8.987 8.987 0 0 1 2.65 -.396z" />
+            <path
+              d="M8 14.5c.5 2 2.358 2.5 4 2.5c2.905 0 4 -1.187 4 -2.5c0 -1.503 -1.927 -2.5 -4 -2.5s-4 -1 -4 -2.5c0 -1.313 1.095 -2.5 4 -2.5c1.642 0 3.5 .5 4 2.5" />
+          </svg>
+          &nbsp;<span>{{basicDetails.skypeId ? basicDetails.skypeId : "-"}}</span>
+        </p>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="#9fa9bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+            <path d="M8 11l0 5" />
+            <path d="M8 8l0 .01" />
+            <path d="M12 16l0 -5" />
+            <path d="M16 16v-3a2 2 0 0 0 -4 0" />
+          </svg>
+          &nbsp;<span>{{basicDetails.linkedInUrl ? basicDetails.linkedInUrl : "-"}}</span>
+        </p>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#9fa9bf"
+            class="icon icon-tabler icons-tabler-filled icon-tabler-map-pin icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" />
+          </svg>
+          &nbsp;<span *ngIf="basicDetails.city != null ">{{basicDetails.city}}, </span>
+          <span *ngIf="basicDetails.state != null ">{{basicDetails.state}}, </span>
+          <span>{{basicDetails.country ? basicDetails.country : "-"}}</span>
+        </p>
+        <p class="text-truncate">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#9fa9bf"
+            class="icon icon-tabler icons-tabler-filled icon-tabler-mail icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M22 7.535v9.465a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-9.465l9.445 6.297l.116 .066a1 1 0 0 0 .878 0l.116 -.066l9.445 -6.297z" />
+            <path
+              d="M19 4c1.08 0 2.027 .57 2.555 1.427l-9.555 6.37l-9.555 -6.37a2.999 2.999 0 0 1 2.354 -1.42l.201 -.007h14z" />
+          </svg>
+          &nbsp;{{basicDetails.email}}
+        </p>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#9fa9bf"
+            class="icon icon-tabler icons-tabler-filled icon-tabler-phone icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M9 3a1 1 0 0 1 .877 .519l.051 .11l2 5a1 1 0 0 1 -.313 1.16l-.1 .068l-1.674 1.004l.063 .103a10 10 0 0 0 3.132 3.132l.102 .062l1.005 -1.672a1 1 0 0 1 1.113 -.453l.115 .039l5 2a1 1 0 0 1 .622 .807l.007 .121v4c0 1.657 -1.343 3 -3.06 2.998c-8.579 -.521 -15.418 -7.36 -15.94 -15.998a3 3 0 0 1 2.824 -2.995l.176 -.005h4z" />
+          </svg>&nbsp;
+          <span *ngIf="basicDetails.phoneNumber || basicDetails.emergencyContactNo;else emptyBlock">
+            <span>{{basicDetails.phoneNumber}}</span>
+            <span *ngIf="basicDetails.phoneNumber && basicDetails.emergencyContactNo"> &bull; </span>
+            <span *ngIf="basicDetails.emergencyContactNo">{{basicDetails.emergencyContactNo}}</span>
+          </span>
+          <ng-template #emptyBlock>-</ng-template>
+        </p>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="#9fa9bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-cake icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 20h18v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8z" />
+            <path
+              d="M3 14.803c.312 .135 .654 .204 1 .197a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1c.35 .007 .692 -.062 1 -.197" />
+            <path d="M12 4l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z" />
+          </svg>
+          &nbsp;{{basicDetails.birthDate ? (basicDetails.birthDate | date) : "-"}}
+        </p>
+        <p class="m-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#9fa9bf"
+            class="icon icon-tabler icons-tabler-filled icon-tabler-calendar icon-text">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M16 2a1 1 0 0 1 .993 .883l.007 .117v1h1a3 3 0 0 1 2.995 2.824l.005 .176v12a3 3 0 0 1 -2.824 2.995l-.176 .005h-12a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-12a3 3 0 0 1 2.824 -2.995l.176 -.005h1v-1a1 1 0 0 1 1.993 -.117l.007 .117v1h6v-1a1 1 0 0 1 1 -1zm3 7h-14v9.625c0 .705 .386 1.286 .883 1.366l.117 .009h12c.513 0 .936 -.53 .993 -1.215l.007 -.16v-9.625z" />
+            <path
+              d="M12 12a1 1 0 0 1 .993 .883l.007 .117v3a1 1 0 0 1 -1.993 .117l-.007 -.117v-2a1 1 0 0 1 -.117 -1.993l.117 -.007h1z" />
+          </svg>
+          &nbsp;{{ basicDetails.joiningDate | date }}
+        </p>
+      </div>
+    </nz-card>
+  </div>
+
+  <!-- Details card -->
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 22, offset: 1 }" [nzMd]="{ span: 22, offset: 1 }"
+    [nzLg]="{ span: 20, offset: 2 }" [nzXl]="{ span: 20, offset: 2 }" [nzXXl]="{ span: 20, offset: 2 }">
+    <nz-card class="p-0" [nzBordered]="true">
+      <nz-tabset>
+        <nz-tab nzTitle="About">
+          <ng-template nz-tab>
+            <p *ngIf="basicDetails.about != null && basicDetails.about != ''; else noContent">
+              {{ basicDetails.about }}
+            </p>
+          </ng-template>
+          <ng-template #noContent>
+            <nz-empty></nz-empty>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="KRAs">
+          <ng-template nz-tab>
+            <app-kra></app-kra>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Skills">
+          <ng-template nz-tab>
+            <app-skill></app-skill>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Experience">
+          <ng-template nz-tab>
+            <app-experience></app-experience>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Certifications">
+          <ng-template nz-tab>
+            <app-certification></app-certification>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Projects">
+          <ng-template nz-tab>
+            <app-project></app-project>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Trainings">
+          <ng-template nz-tab>
+            <app-training></app-training>
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="Languages">
+          <ng-template nz-tab>
+            <app-language></app-language>
+          </ng-template>
+        </nz-tab>
+      </nz-tabset>
+    </nz-card>
+  </div>
+</div>
+
+<!-- Basic details form modal -->
+<nz-modal [(nzVisible)]="isBasicDetailModalVisible" nzCentered nzTitle="Edit Basic Details" nzClosable="false"
+  [nzFooter]="null" [nzBodyStyle]="{ borderRadius: '20px' }">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="formBasicDetails" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="firstName">First Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="firstName" id="firstName" placeholder="Enter your first name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="lastName">Last Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="lastName" id="lastName" placeholder="Enter your last name" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="pronounGuid">Pronouns</nz-form-label>
+        <nz-form-control>
+          <nz-select id="pronounGuid" formControlName="pronounGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select pronoun" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let pronoun of pronouns" [nzValue]="pronoun.pronounGuid" [nzLabel]="pronoun.pronoun">
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="businessUnitGuid">Business Unit</nz-form-label>
+        <nz-form-control>
+          <nz-select id="businessUnitGuid" formControlName="businessUnitGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select business unit" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let businessUnit of businessUnits" [nzValue]="businessUnit.businessUnitGuid"
+              [nzLabel]="businessUnit.businessUnitName"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="phoneNumber">Phone Number</nz-form-label>
+        <nz-form-control>
+          <input type="text" formControlName="phoneNumber" id="phoneNumber" nz-input placeholder="Enter phone number"
+            onlyNumber />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="emergencyContactNo">Emergency Contact No</nz-form-label>
+        <nz-form-control>
+          <input type="text" formControlName="emergencyContactNo" id="emergencyContactNo" nz-input
+            placeholder="Enter emergency contact no" onlyNumber />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="skypeId">Skype Id</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="skypeId" id="skypeId" placeholder="live:.cid.xyz..." />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="linkedInUrl">LinkedIn Url</nz-form-label>
+        <nz-form-control>
+          <input nz-input type="text" formControlName="linkedInUrl" id="linkedInUrl" placeholder="Enter LinkedIn Url" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Birth Date</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="birthDate" class="w-100"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="country">Country</nz-form-label>
+        <nz-form-control>
+          <nz-select id="country" formControlName="country" nzShowSearch nzAllowClear nzPlaceHolder="Select country"
+            [nzDropdownStyle]="{ 'border-radius': '8px' }" (ngModelChange)="getStatesByCountry($event)">
+            <nz-option *ngFor="let country of countries" [nzValue]="country.name" [nzLabel]="country.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="state">State</nz-form-label>
+        <nz-form-control>
+          <nz-select id="state" formControlName="state" [nzDisabled]="!showStates" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select state" [nzDropdownStyle]="{ 'border-radius': '8px' }"
+            (ngModelChange)="getCitiesByState($event)">
+            <nz-option *ngFor="let state of states" [nzValue]="state.name" [nzLabel]="state.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="city">City</nz-form-label>
+        <nz-form-control>
+          <nz-select id="city" formControlName="city" [nzDisabled]="!showCities" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select city" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+            <nz-option *ngFor="let city of cities" [nzValue]="city.name" [nzLabel]="city.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="about">About</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="about" placeholder="Write about yourself" id="about"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleBasicDetailsModalCancel($event)">
+          Cancel
+        </button>
+        <button nz-button nzType="primary" nzShape="round" (click)="handleBasicDetailsModalOk()">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isResetModalVisible" nzTitle="Change Password" nzCentered [nzFooter]="null"
+  [nzBodyStyle]="{ borderRadius: '20px' }" (nzOnCancel)="handleCancel()">
+  <ng-container *nzModalContent>
+    <form nzLayout="vertical" nz-form [formGroup]="validateForm" (ngSubmit)="handleChangePassword()">
+      <nz-form-item>
+        <nz-form-label nzFor="password" nzRequired>Password</nz-form-label>
+        <nz-form-control nzErrorTip="Please input your password!">
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+            <input nz-input [type]="passwordVisible ? 'text' : 'password'" id="password" formControlName="password"
+              (ngModelChange)="updateConfirmValidator()" />
+            <ng-template #suffixTemplate>
+              <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                (click)="passwordVisible = !passwordVisible"></span>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group nzPrefixIcon="lock" [nzSuffix]="eyeIcon">
+            <input nz-input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="checkPassword"
+              id="checkPassword" />
+            <ng-template #eyeIcon>
+              <span nz-icon [nzType]="confirmPasswordVisible ? 'eye-invisible' : 'eye'"
+                (click)="confirmPasswordVisible = !confirmPasswordVisible"></span>
+            </ng-template>
+            <ng-template #errorTpl let-control>
+              @if (control.errors?.['required']) { Please confirm your password! }
+              @if (control.errors?.['confirm']) { Two passwords that you enter is
+              inconsistent! }
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleCancel()">
+          Cancel
+        </button>
+        <button nz-button nzDanger nzType="primary" nzShape="round" [disabled]="!validateForm.valid" type="submit">
+          Reset
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="profileImage" nzCentered nzTitle="Update Profile Photo" nzClosable="true" [nzFooter]="null"
+  [nzBodyStyle]="{ borderRadius: '20px' }" (nzOnCancel)="onCancel()">
+  <ng-container *nzModalContent>
+    <div nz-flex nzJustify="flex-end" [nzGap]="8">
+      <input type="file" #file placeholder="Choose file" (change)="uploadAvatar(file.files)"
+        accept="image/png, image/jpeg" />
+
+      <button nz-button nzType="primary" nzShape="round" (click)="DeleteProfileImage(basicDetails.profilePhotoName)"
+        *ngIf="basicDetails.profilePhotoName">
+        Delete Photo
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

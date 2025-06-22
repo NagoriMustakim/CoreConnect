@@ -1,0 +1,15 @@
+.custom-list-title {
+    font-size: large;
+    font-weight: bold;
+}
+
+#certificateImg {
+    object-fit: cover;
+    width: 25vw;
+    height: 25vw;
+    max-width: 164px;
+    max-height: 164px;
+    min-width: 124px;
+    min-height: 124px;
+    vertical-align: middle;
+}

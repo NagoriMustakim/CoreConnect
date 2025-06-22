@@ -1,0 +1,39 @@
+<nz-card nzTitle="Comments" class="p-0 m-0">
+  @if (comments) {
+  <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" id="commentList"
+    class="hide-scrollbar">
+    <ng-template #item let-item>
+      <nz-comment [nzAuthor]="item.commenterName" [nzDatetime]="formatDate(item.modificationDate)">
+        <nz-avatar nz-comment-avatar nzIcon="user" nzSrc='{{imageUrl}}/{{item.commenterProfilePhotoName}}'></nz-avatar>
+        <nz-comment-content>
+          <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="3">{{ item.comment }}</p>
+        </nz-comment-content>
+        <nz-comment-action>
+          <span nz-icon nzType="edit" nzTheme="outline" (click)="handleCommentEdit(item)"></span>
+        </nz-comment-action>
+        <nz-comment-action>
+          <span nz-icon nzType="delete" nzTheme="outline" (click)="showCommentDeleteConfirm(item.commentGuid)"></span>
+        </nz-comment-action>
+      </nz-comment>
+    </ng-template>
+  </nz-list>
+  }
+
+  <nz-comment-content>
+    <form nz-form [formGroup]="formComment">
+      <div nz-flex nzAlign="end" [nzGap]="8">
+        <nz-form-item class="w-100">
+          <nz-form-control>
+            <textarea nz-input formControlName="comment" placeholder="Write comment" class="w-100 hide-scrollbar"
+              [nzAutosize]="{ minRows: 1, maxRows: 3 }"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <button nz-button nzType="primary" nzShape="circle" [nzLoading]="submitting" (click)="handleCommentAddEdit()"
+            [disabled]="formComment.controls.comment.value === ''"><span nz-icon nzType="send" nzTheme="outline"></span>
+          </button>
+        </nz-form-item>
+      </div>
+    </form>
+  </nz-comment-content>
+</nz-card>

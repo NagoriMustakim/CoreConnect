@@ -1,0 +1,76 @@
+<div nz-flex [nzJustify]="'space-between'" [nzAlign]="'center'">
+  <h1>Trainings</h1>
+
+  <button nz-button nzType="primary" nzShape="circle" (click)="showModal()">
+    <span nz-icon nzType="plus"></span>
+  </button>
+</div>
+
+<nz-modal [(nzVisible)]="isModelVisible" nzTitle="{{ saveMsg }} Training" [nzContent]="nzModalContent" [nzFooter]="null"
+  (nzOnCancel)="handleCancel()">
+
+  <ng-template #nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="fromTraining" nzLayout="vertical"
+      (ngSubmit)="handleTrainingModalOk()">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="trainingTitle">Traning Title</nz-form-label>
+        <nz-form-control nzErrorTip="This field is required!">
+          <input nz-input formControlName="trainingTitle" placeholder="e.g, soft skill" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="trainingDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="trainingDescription" placeholder="Description"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div style="width: 100%; gap: 0.3em" nz-flex [nzJustify]="'flex-end'" [nzAlign]="'center'">
+          <button nz-button nzType="default" (click)="handleCancel()" nzShape="round" type="button">
+            Cancel
+          </button>
+          <button nz-button [nzType]="'primary'" nzShape="round" [nzLoading]="fromTraining.pending" type="submit">
+            Save
+          </button>
+        </div>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>
+
+<nz-table nzShowPagination nzShowSizeChanger nzFrontPagination='false' [nzData]="tranings" [nzPageSize]="pageSize"
+  [nzTotal]="total" [nzPageIndex]="1" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="getAllTranings($event)"
+  [nzScroll]="{ y: '55vh' }"
+  (nzPageSizeChange)="getAllTranings(1, $event)">
+  <tbody>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Action</th>
+    </tr>
+    <tr *ngFor="let data of tranings">
+      <td>{{ data.trainingTitle }}</td>
+      <td>
+        <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2">
+          {{ data.trainingDescription }}
+        </p>
+      </td>
+      <td>
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="default" nzShape="circle" (click)="showTrainingModal(data)">
+            <span nz-icon nzType="edit" nzTheme="outline"></span></button>
+
+          <button *nzSpaceItem nzDanger nz-button nzType="default" nzShape="circle" (click)="delete(data.trainingGuid)">
+            <span nz-icon nzDanger nzType="delete"></span></button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #rangeTemplate let-range="range" let-total>
+  Showing {{ range[0] }}-{{ range[1] }} of {{ total }} records
+</ng-template>

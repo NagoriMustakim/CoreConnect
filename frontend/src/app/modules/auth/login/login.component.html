@@ -1,0 +1,70 @@
+<div nz-row nzAlign="middle" class="h-100 bg-gray">
+  <div nz-col [nzXs]="{ span: 22, offset: 1 }" [nzSm]="{ span: 16, offset: 4 }" [nzMd]="{ span: 14, offset: 5 }"
+    [nzLg]="{ span: 20, offset: 2 }" [nzXl]="{ span: 16, offset: 4 }" [nzXXl]="{ span: 14, offset: 5 }">
+    <nz-card class="p-3 px-4">
+      <div nz-row>
+        <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzLg]="{ span: 12, offset: 0 }" [nzXl]="{ span: 12, offset: 0 }"
+          [nzXXl]="{ span: 12, offset: 0 }">
+          <img class="logo-text" alt="Linkway logo" src="../../../../../assets/images/coreconnect_logo.png" />
+          <p class="fs-2vmax mt-4 mb-0">Welcome Back</p>
+          <h3 class="mb-4">Login to your account</h3>
+        </div>
+        <div nz-col [nzXs]="{ span: 24, offset: 0 }" [nzLg]="{ span: 10, offset: 2 }" [nzXl]="{ span: 10, offset: 2 }"
+          [nzXXl]="{ span: 10, offset: 2 }">
+          <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.loginFormModel" nzLayout="vertical"
+            (submit)="onSubmit()">
+            <nz-form-item>
+              <nz-form-label nzFor="Email" nzRequired>Email</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter valid email!">
+                <nz-input-group nzPrefixIcon="mail">
+                  <input type="text" nz-input formControlName="Email" placeholder="Email" class="login-input p-2" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzFor="Password" nzRequired>Password</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter your Password!">
+                <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                  <input #passwordInput [type]="passwordVisible ? 'text' : 'password'" nz-input
+                    formControlName="Password" placeholder="Password" />
+                </nz-input-group>
+                <ng-template #suffixTemplate>
+                  <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                    (click)="passwordVisible = !passwordVisible"></span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <div nz-flex nzJustify="space-between" nzAlign="center" class="mb-3">
+              <a (click)="openForgotPassword()">Forgot password?</a>
+              <button nz-button [nzType]="'primary'" type="submit">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzCentered nzTitle="Forgot Password?" [nzFooter]="null" (nzOnCancel)="onCancel()">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="service.forgotPaswordFormModel" autocomplete="on"
+      (submit)="forgotPasswordSubmit()">
+      <p>Please enter your registered email</p>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter valid email!">
+          <nz-input-group nzPrefixIcon="mail">
+            <input type="text" nz-input class="txt-input" formControlName="email" placeholder="Email" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="onCancel()">
+          Cancel
+        </button>
+        <button nz-button nzType="primary" nzShape="round">Send</button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

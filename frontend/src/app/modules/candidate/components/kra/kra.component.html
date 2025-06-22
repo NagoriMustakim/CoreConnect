@@ -1,0 +1,26 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+  <h3 class="m-0">Key Result Areas</h3>
+</div>
+<nz-card [nzBordered]="false" class="bg-light">
+  <nz-list class="demo-loadmore-list" [nzLoading]="initLoading" *ngIf="kra.length > 0; else noContent">
+    @for (item of kra; track kra) {
+    <nz-list-item>
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          <h4 class="mb-0">
+            {{ item.kratitle }}
+          </h4>
+        </nz-list-item-meta-title>
+        <nz-list-item-meta-description>
+          <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary m-0">
+            {{item.kradescription}}
+          </p>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
+    </nz-list-item>
+    }
+  </nz-list>
+</nz-card>
+<ng-template #noContent>
+  <nz-empty></nz-empty>
+</ng-template>

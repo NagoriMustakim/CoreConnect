@@ -1,0 +1,139 @@
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css" />
+<div class="export-button-container">
+  <button nz-button nzType="primary" (click)="exportToPDF()">
+    Export to PDF
+  </button>
+</div>
+
+<div id="container" class="container">
+  <div class="header">
+    <div class="wrapper">
+      <div class="full-name">
+        <span class="first-name">{{ resumeData.firstName }} </span>
+        <span class="last-name">{{ resumeData.lastName }}</span>
+      </div>
+      <div class="header-image-wrapper">
+
+        <div class="header-image">
+          <img height="30px" src='../../../../../assets/images/gatewaylogo.png'/>
+          <p class="business-unit">{{ resumeData.businessUnit.businessUnitName }}</p>
+        </div>
+        <p class="tagline">A gateway company</p>
+      </div>
+    </div>
+    <div class="contact-info">
+      <span class="email">Email: </span>
+      <span class="email-val">{{ resumeData.email }}</span>
+      <span class="separator" *ngIf="resumeData.phoneNumber"></span>
+      <span class="phone" *ngIf="resumeData.phoneNumber">Phone: </span>
+      <span class="phone-val" *ngIf="resumeData.phoneNumber">{{
+        resumeData.phoneNumber
+        }}</span>
+    </div>
+
+    <div class="about">
+      <span class="position" *ngIf="resumeData.designation">{{
+        resumeData.designation
+        }}</span>
+    </div>
+  </div>
+  <div class="details">
+    <div class="wrapper">
+      <div class="wrapper-col">
+        <div class="section" *ngIf="resumeData.experiences.length>0">
+          <div class="section__title">Experience</div>
+          <div *ngFor="let experience of resumeData.experiences" class="section__list">
+            <div class="section__list-item">
+              <div class="left">
+                <div class="name">{{ experience.designation }}</div>
+                <div class="subtitle">{{ experience.companyName }}</div>
+                <div class="date">
+                  {{ experience.experienceStartDate | date }} -
+                  <ng-container *ngIf="experience.experienceEndDate; else present">
+                    {{ experience.experienceEndDate | date }}
+                  </ng-container>
+                  <ng-template #present>Present</ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section" *ngIf="resumeData.certifications.length>0">
+          <div class="section__title">Certifications</div>
+          <div *ngFor="let certification of resumeData.certifications" class="section__list">
+            <div class="section__list-item">
+              <div class="left">
+                <div class="name">{{ certification.certificationTitle }}</div>
+                <div class="addr">
+                  {{ certification.companyName }}
+                </div>
+                <div class="date" *ngIf="certification.certificationIssueDate">
+                  {{ certification.certificationIssueDate | date }}
+                  <ng-container *ngIf="
+                                      certification.certificationExpirationDate;
+                                      else present
+                                    ">-
+                    {{ certification.certificationExpirationDate | date }}
+                  </ng-container>
+                  <ng-template #present>Present</ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wrapper-col">
+        <div class="section" *ngIf="resumeData.skills.length>0">
+          <div class="section__title">Skills</div>
+          <div class="box-skill">
+            <div *ngFor="let skill of resumeData.skills" class="skills">
+              <div class="skills__item">
+                <div class="left">
+                  <div class="name">{{ skill.skillTitle }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section" *ngIf="resumeData.projects.length>0">
+          <div class="section__title">Projects</div>
+          <div *ngFor="let project of resumeData.projects" class="section__list">
+            <div class="section__list-item project-item">
+              <div class="name">{{ project.projectTitle }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="section" *ngIf="resumeData.language.length>0">
+          <div class="section__title">Languages</div>
+          <div *ngFor="let language of resumeData.language" class="skills">
+            <div class="skills__item">
+              <div class="left">
+                <div class="text">
+                  {{ language.languageName }} - {{ language.proficiencyTitle }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section" *ngIf="resumeData.trainings.length>0">
+          <div class="section__title">Trainings</div>
+          <div *ngFor="let training of resumeData.trainings" class="section__list">
+            <div class="section__list-item">
+              <div class="left">
+                <div class="name">{{ training.trainingTitle }}</div>
+                <div class="addr">{{ training.trainingType }}</div>
+                <div class="date">
+                  {{ training.trainingStartDate | date }}
+                  <ng-container *ngIf="training.trainingEndDate; else present">
+                    - {{ training.trainingEndDate | date }}
+                  </ng-container>
+                  <ng-template #present>Present</ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

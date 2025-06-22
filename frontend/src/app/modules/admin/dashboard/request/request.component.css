@@ -1,0 +1,16 @@
+.wrapper{
+  display: flex;
+  gap:0.4rem;
+  margin-inline-end: 0.5rem;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.users-list {
+  max-height: 10rem;
+  overflow: auto;
+}
+

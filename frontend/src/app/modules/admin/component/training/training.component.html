@@ -1,0 +1,129 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+  <h3 class="m-0">Trainings</h3>
+  <button nz-button nzType="primary" nzShape="round" (click)="showTrainingModal()">
+    <span nz-icon nzType="plus"></span>
+    Add
+  </button>
+</div>
+<nz-card [nzBordered]="false" class="bg-light">
+  <nz-list class="demo-loadmore-list" [nzLoading]="initLoading" *ngIf="trainings.length>0; else noContent">
+    @for (training of trainings; track training) {
+    <nz-list-item>
+      <nz-list-item-meta>
+        <nz-list-item-meta-title>
+          <h4 class="mb-0">
+            {{ training.trainingTitle }}
+            <nz-tag [nzColor]="'blue'" [nzBordered]="false">{{
+              training.trainingType
+              }}</nz-tag>
+          </h4>
+        </nz-list-item-meta-title>
+        <nz-list-item-meta-description>
+          <nz-space>
+            <span *nzSpaceItem class="text-secondary">{{
+              training.trainingStartDate | date
+              }}</span>
+            <span *nzSpaceItem class="text-secondary">&dash;</span>
+            <span *nzSpaceItem class="text-secondary">{{
+              training.isTrainingActive
+              ? "Present"
+              : (training.trainingEndDate | date)
+              }}</span>
+          </nz-space>
+          <span *ngIf="training.userTrainingDescription != null && training.userTrainingDescription != ''">
+            <p nz-typography nzEllipsis nzExpandable [nzEllipsisRows]="2" class="text-secondary">
+              {{training.userTrainingDescription}}</p>
+          </span>
+        </nz-list-item-meta-description>
+      </nz-list-item-meta>
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <button nz-button nzType="default" nzShape="circle" (click)="showTrainingModal(training)">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </nz-list-item-action>
+        <nz-list-item-action>
+          <button nz-button nzType="default" nzShape="circle" nzDanger
+            (click)="showTrainingDeleteConfirm(training.userTrainingGuid)">
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </nz-list-item-action>
+      </ul>
+    </nz-list-item>
+    }
+  </nz-list>
+  <ng-template #noContent>
+    <nz-empty></nz-empty>
+  </ng-template>
+</nz-card>
+
+<nz-modal [(nzVisible)]="isTrainingModalVisible" nzCentered nzTitle="{{ saveMsg }} Training" nzClosable="false"
+  (nzAfterClose)="handleAfterTrainingModalClose()" [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <form nz-form [nzAutoTips]="autoTips" [formGroup]="formTraining" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="trainingTitle">Training Title</nz-form-label>
+        <nz-form-control>
+          <nz-select id="trainingNameGuid" formControlName="trainingNameGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select training">
+            <nz-option *ngFor="let trainingName of trainingNames" [nzValue]="trainingName.trainingGuid"
+              [nzLabel]="trainingName.trainingTitle"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired nzFor="trainingTypeGuid">Training Type</nz-form-label>
+        <nz-form-control>
+          <nz-select id="trainingTypeGuid" formControlName="trainingTypeGuid" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select training type">
+            <nz-option *ngFor="let trainingType of trainingTypes" [nzValue]="trainingType.trainingTypeGuid"
+              [nzLabel]="trainingType.trainingType"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="isTrainingActive" (ngModelChange)="handleCurrentTrainingCheckbox($event)">
+            <span>I am currently pursuing this training</span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzXs]="24" [nzSm]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Start Date</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="trainingStartDate" class="w-100" [nzDisabledDate]="disabledStartDate"
+                (nzOnOpenChange)="handleStartOpenChange()"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="!formTraining.controls.isTrainingActive.value">End Date</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="trainingEndDate"
+                [nzDisabled]="formTraining.controls.isTrainingActive.value" class="w-100"
+                [nzDisabledDate]="disabledEndDate" (nzOnOpenChange)="handleEndOpenChange()"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label nzFor="userTrainingDescription">Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="userTrainingDescription" placeholder="Enter Description" id="description"
+            [nzAutosize]="{ minRows: 1, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-flex nzJustify="flex-end" [nzGap]="8">
+        <button nz-button nzType="default" nzShape="round" (click)="handleTrainingModalCancel($event)">
+          Cancel
+        </button>
+        <button nz-button nzType="primary" nzShape="round" (click)="handleTrainingModalOk()">
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

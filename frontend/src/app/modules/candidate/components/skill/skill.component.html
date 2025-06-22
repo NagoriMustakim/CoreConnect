@@ -1,0 +1,84 @@
+<div nz-flex nzAlign="center" nzJustify="space-between" class="mb-3">
+    <h3 class="m-0">Skills</h3>
+    @if(userId===''){
+    <button nz-button nzType="primary" nzShape="round" (click)="showSkillModal()">
+        <span nz-icon nzType="plus"></span>
+        Add
+    </button>
+    }
+</div>
+<nz-list nzGrid>
+    <div nz-row [nzGutter]="16" *ngIf="skills.length>0; else noContent">
+        @for (skill of skills; track skill) {
+        <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="24" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+            <nz-list-item>
+                <nz-card [nzBordered]="false" class="bg-light">
+                    <div class="combination-wrapper" nz-flex nzJustify="space-between" nzAlign="center">
+                        <div>
+                            <h3 class="mb-0">{{ skill.skillTitle }}</h3>
+                            @if(skill?.proficiencyId !== null){
+                            <p class="m-0">{{getProficiencies(+skill.proficiencyId)}}</p>
+                            }
+                        </div>
+                        @if(userId===''){
+                        <ul nz-list-item-actions>
+                            <nz-list-item-action>
+                                <button nz-button nzType="default" nzShape="circle" (click)="showSkillModal(skill)">
+                                    <span nz-icon nzType="edit" nzTheme="outline"></span>
+                                </button>
+                            </nz-list-item-action>
+                            <nz-list-item-action>
+                                <button nz-button nzType="default" nzShape="circle" nzDanger
+                                    (click)="showSkillDeleteConfirm(skill.userSkillGuid)">
+                                    <span nz-icon nzType="delete" nzTheme="outline"></span>
+                                </button>
+                            </nz-list-item-action>
+                        </ul>
+                        }
+                    </div>
+                </nz-card>
+            </nz-list-item>
+        </div>
+        }
+    </div>
+</nz-list>
+
+<ng-template #noContent>
+    <nz-empty></nz-empty>
+</ng-template>
+<nz-modal [(nzVisible)]="isSkillModalVisible" nzCentered nzTitle="{{ saveMsg }} Skill" nzClosable="false"
+    [nzFooter]="null" [nzBodyStyle]="{ borderRadius: '20px' }">
+    <ng-container *nzModalContent>
+        <form nz-form [nzAutoTips]="autoTips" [formGroup]="formSkill" nzLayout="vertical">
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="skillGuid">Skill</nz-form-label>
+                <nz-form-control>
+                    <nz-select id="skillGuid" formControlName="skillGuid" nzShowSearch nzAllowClear
+                        nzPlaceHolder="Select skill" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+                        <nz-option *ngFor="let skill of skillsList" [nzValue]="skill.skillGuid"
+                            [nzLabel]="skill.skillTitle"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzFor="proficiencyId">Proficiency</nz-form-label>
+                <nz-form-control>
+                    <nz-select id="proficiencyId" formControlName="proficiencyId" nzShowSearch nzAllowClear
+                        nzPlaceHolder="Select proficiency" [nzDropdownStyle]="{ 'border-radius': '8px' }">
+                        <nz-option *ngFor="let proficiencyKey of proficiencyKeys" [nzValue]="proficiencyKey"
+                            [nzLabel]="getProficiencies(proficiencyKey)">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-flex nzJustify="flex-end" [nzGap]="8">
+                <button nz-button nzType="default" nzShape="round" (click)="handleSkillModalCancel($event)">
+                    Cancel
+                </button>
+                <button nz-button nzType="primary" nzShape="round" (click)="handleSkillModalOk()">
+                    Save
+                </button>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>

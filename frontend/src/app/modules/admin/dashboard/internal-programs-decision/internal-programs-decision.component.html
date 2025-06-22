@@ -1,0 +1,20 @@
+<h1>Nominations</h1>
+
+<div *ngIf="internalPrograms.length > 0; else noContent">
+  <div nz-row [nzGutter]="[18, 18]">
+    <div *ngFor="let item of internalPrograms" nz-col [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 24, offset: 0 }"
+      [nzMd]="{ span: 24, offset: 0 }" [nzLg]="{ span: 12, offset: 0 }" [nzXl]="{ span: 8, offset: 0 }"
+      [nzXXl]="{ span: 6, offset: 0 }">
+      <nz-card>
+        <h2>{{ item.internalProgramName }}</h2>
+        <div nz-flex nzJustify="flex-end" [nzGap]="8">
+          <button nz-button nzType="primary" nzShape="round" (click)="NominationDetails(item)">View
+            all </button>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</div>
+<ng-template #noContent>
+  <nz-empty></nz-empty>
+</ng-template>

@@ -1,0 +1,145 @@
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css" />
+<button (click)="exportToPDF()">Export to PDF</button>
+
+<div id="container" class="container">
+  <div class="header">
+    <div class="full-name">
+      <span class="first-name">{{ resumeData.firstName }} </span>
+      <span class="last-name">{{ resumeData.lastName }}</span>
+    </div>
+    <div class="contact-info">
+      <span class="email">Email: </span>
+      <span class="email-val">{{ resumeData.email }}</span>
+      <span class="separator"></span>
+      <span class="phone">Phone: </span>
+      <span class="phone-val">{{ resumeData.phoneNumber }}</span>
+    </div>
+
+    <div class="about">
+      <span class="position">{{ resumeData.designation }}</span>
+      <span class="desc">
+        {{ resumeData.about }}
+      </span>
+    </div>
+  </div>
+  <div class="details">
+    <div class="section">
+      <div class="section__title">Experience</div>
+      <div *ngFor="let experience of resumeData.experiences" class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">{{ experience.companyName }}</div>
+            <div class="addr">{{ experience.locationTypeName }}</div>
+          </div>
+          <div class="right">
+            <div class="name">{{ experience.designation }}</div>
+            <div class="duration">
+              {{ experience.experienceStartDate | date }} -
+              {{ experience.experienceEndDate | date }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Education</div>
+      <div *ngFor="let education of resumeData.education" class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">{{ education.educationInstituteName }}</div>
+            <div class="addr">{{ education.educationDegree }}</div>
+            <div *ngIf="!education.isEducationActive; else present" class="duration">
+              {{ education.educationStartDate | date }} -
+              {{ education.educationEndDate | date }}
+            </div>
+            <ng-template #present>
+              <div class="duration">
+                {{ education.educationStartDate | date }} -
+                present
+              </div>
+            </ng-template>
+          </div>
+          <div class="right">
+            <div class="name">Grade : {{ education.educationGrade }}</div>
+            <div class="desc">{{ education.educationDescription }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Projects</div>
+      <div *ngFor="let project of resumeData.projects" class="section__list">
+        <div class="section__list-item">
+          <div class="name">{{ project.projectName }}</div>
+          <div class="text">
+            {{ project.projectDescription }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Skills</div>
+      <div *ngFor="let skill of resumeData.skills" class="skills">
+        <div class="skills__item">
+          <div class="left">
+            <div class="name">{{ skill.skillTitle }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Languages</div>
+      <div *ngFor="let language of resumeData.language" class="skills">
+        <div class="skills__item">
+          <div class="left">
+            <div class="text">
+              {{ language.languageName }} - {{ language.proficiencyTitle }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Certifications</div>
+      <div *ngFor="let certification of resumeData.certifications" class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">{{ certification.certificationTitle }}</div>
+            <div class="addr">{{ certification.certificationIssuingOrganization }}</div>
+          </div>
+          <div class="right">
+            <div class="name">Issue Date: {{ certification.certificationIssueDate | date }}</div>
+            <div class="duration">
+              Expiration Date: {{ certification.certificationExpirationDate | date }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Trainings</div>
+      <div *ngFor="let training of resumeData.trainings" class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">{{ training.trainingTitle }}</div>
+            <div class="addr">{{ training.trainingType }}</div>
+          </div>
+          <div class="right">
+            <div class="name">Start Date: {{ training.trainingStartDate | date }}</div>
+            <div class="duration">
+              End Date: {{ training.trainingEndDate | date }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="section">
+      <div class="right">
+        <p>{{resumeData.businessUnit.businessUnitName}}</p>
+        <p>{{resumeData.businessUnit.businessUnitDescription}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,9 @@
+textarea + textarea {
+    margin-top: 24px;
+  }
+  
+  nz-select {
+    margin: 0 8px 10px 0;
+    width: 120px;
+  }
+  
