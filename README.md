@@ -48,6 +48,3 @@ Issues and pull requests are greatly appreciated.
 ## Authors
 
 - Mustakim Nagori
-- Urva Suthar
-- Hemang kateshiya
-- Pruthvi Raj
