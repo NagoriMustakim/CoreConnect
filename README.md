@@ -47,4 +47,4 @@ Issues and pull requests are greatly appreciated.
 
 ## Authors
 
-- Mustakim Nagori
+- [Mustakim Nagori](https://github.com/NagoriMustakim)
